@@ -1,0 +1,970 @@
+{
+  "name": "Aut 2: Trigger Agente IA",
+  "nodes": [
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "9edc9872f67f0db25c5c7e582ffd558f55b5dc2564bd949be94683d77f25741e@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Alejandra"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.plus({ days: 1 }).set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 18, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        112
+      ],
+      "id": "51c0ac91-6362-4235-92b1-1a7d45c6b77d",
+      "name": "Get many events2",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 6
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -800,
+        352
+      ],
+      "id": "49f7e5ce-317b-411f-bd88-a53b8c945188",
+      "name": "Schedule Trigger2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7373a346-1f6a-48c9-a3dd-2b9de0d4ba04",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": "=,",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        112
+      ],
+      "id": "343347b1-d354-42b2-b97b-ed5436b6a590",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs - Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Alejandra",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Cliente": "={{ $json.summary.split(',')[0].trim() }}",
+            "Servicio": "={{ $json.summary.split(',')[1].trim() }}",
+            "start": "={{ $json.start.dateTime }}",
+            "end": "={{ $json.end.dateTime }}",
+            "creator": "={{ $json.creator }}",
+            "created": "={{ $json.created }}",
+            "Profesional": "={{ $json.organizer.displayName }}",
+            "Telefono": "={{ $json.summary.split(',')[2].trim() }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Servicio",
+              "displayName": "Servicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Profesional",
+              "displayName": "Profesional",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "start",
+              "displayName": "start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "end",
+              "displayName": "end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "creator",
+              "displayName": "creator",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created",
+              "displayName": "created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        656,
+        16
+      ],
+      "id": "53d10251-2142-4eec-9b69-d8992ab2300d",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "f88ab9772e9c026f25509e3a69bcf2ba41fd15c2a049559c5184433ff9d5ee76@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Alejandro"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.plus({ days: 1 }).set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 18, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        384
+      ],
+      "id": "349f0c48-6d57-4b08-97bd-9332f788064c",
+      "name": "Get many events",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7373a346-1f6a-48c9-a3dd-2b9de0d4ba04",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": "=,",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        304,
+        400
+      ],
+      "id": "758516c3-0726-4ce7-a649-87a73ec4dafa",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs - Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Cliente": "={{ $json.summary.split(',')[0].trim() }}",
+            "created": "={{ $json.created }}",
+            "creator": "={{ $json.creator }}",
+            "end": "={{ $json.end.dateTime }}",
+            "start": "={{ $json.start.dateTime }}",
+            "Servicio": "={{ $json.summary.split(',')[1].trim() }}",
+            "Telefono": "={{ $json.summary.split(',')[2].trim() }}",
+            "Profesional": "={{ $json.organizer.displayName }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Servicio",
+              "displayName": "Servicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Profesional",
+              "displayName": "Profesional",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "start",
+              "displayName": "start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "end",
+              "displayName": "end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "creator",
+              "displayName": "creator",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "created",
+              "displayName": "created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        576,
+        368
+      ],
+      "id": "cd2ec346-8048-4467-ab40-a6ded54196c1",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "numberToDelete": 16
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -576,
+        352
+      ],
+      "id": "4bda15b3-ff4e-4836-9d11-50416b6ecfac",
+      "name": "Delete rows or columns from sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "content": "[Alejandra]",
+        "height": 288,
+        "width": 1184
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -16
+      ],
+      "id": "c3b4e072-24ac-4fa0-8f63-5c1e9137fe47",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "## Alejandro\n**** )",
+        "height": 224,
+        "width": 1088
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        336
+      ],
+      "id": "d95e5478-f8d9-43a8-8056-86989cbc8a2c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "8a5b1ae840c1e0c94a3b5d756e251860adf82ead71b41c22fce912773029c9d5@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Brayan"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.plus({ days: 1 }).set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 18, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        608
+      ],
+      "id": "c9b40af8-a131-4913-bc6f-ae2a810518ea",
+      "name": "Get many events1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7373a346-1f6a-48c9-a3dd-2b9de0d4ba04",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": "=,",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        304,
+        624
+      ],
+      "id": "95b2c597-c395-4c97-9a42-850d08971944",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs - Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $json.id }}",
+            "Cliente": "={{ $json.summary.split(',')[0].trim() }}",
+            "Servicio": "={{ $json.summary.split(',')[1].trim() }}",
+            "start": "={{ $json.start.dateTime }}",
+            "end": "={{ $json.end.dateTime }}",
+            "creator": "={{ $json.creator }}",
+            "created": "={{ $json.created }}",
+            "Profesional": "={{ $json.organizer.displayName }}",
+            "Telefono": "={{ $json.summary.split(',')[2].trim() }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Servicio",
+              "displayName": "Servicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Profesional",
+              "displayName": "Profesional",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "start",
+              "displayName": "start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "end",
+              "displayName": "end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "creator",
+              "displayName": "creator",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "created",
+              "displayName": "created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        608,
+        608
+      ],
+      "id": "d6a19a43-d575-4cd3-aa82-eaf8e905d640",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/978507082009213/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAQZCDXJWDsIBQcu6ZBDcw99dZAIJkHVzz61iEtbkxDzaXXf2K2fEJJhZBt1x34ehAVPHarfH6n5TKwEZCsLIVfOmWJWtKYRnvnonBYl3a91yCf09f483D1ZBUL4aTbHIT9h7D2BcxwiAIzZBlRYmlv6CrzTFQeqDE2LYZBIYYDukvKBylKvzbDZB0GqPReBgn9ZAxwB8ELEbC0wx63lhU"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.Telefono }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"recordatorio_24h_sandalo_esp\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Cliente }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.toDateTime().format('dd/MM/yyyy') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.toDateTime().format('hh:mm a') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Servicio }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Profesional }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        912,
+        0
+      ],
+      "id": "e4a2f486-b7a6-4a8b-a249-c7357f0a7682",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/978507082009213/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAQZCDXJWDsIBQcu6ZBDcw99dZAIJkHVzz61iEtbkxDzaXXf2K2fEJJhZBt1x34ehAVPHarfH6n5TKwEZCsLIVfOmWJWtKYRnvnonBYl3a91yCf09f483D1ZBUL4aTbHIT9h7D2BcxwiAIzZBlRYmlv6CrzTFQeqDE2LYZBIYYDukvKBylKvzbDZB0GqPReBgn9ZAxwB8ELEbC0wx63lhU"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.Telefono }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"recordatorio_24h_sandalo_esp\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Cliente }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.toDateTime().format('dd/MM/yyyy') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.toDateTime().format('hh:mm a') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Servicio }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Profesional }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        816,
+        384
+      ],
+      "id": "27ca5a20-7116-4ae2-b7bd-0cf82c4cf06b",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/978507082009213/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAQZCDXJWDsIBQcu6ZBDcw99dZAIJkHVzz61iEtbkxDzaXXf2K2fEJJhZBt1x34ehAVPHarfH6n5TKwEZCsLIVfOmWJWtKYRnvnonBYl3a91yCf09f483D1ZBUL4aTbHIT9h7D2BcxwiAIzZBlRYmlv6CrzTFQeqDE2LYZBIYYDukvKBylKvzbDZB0GqPReBgn9ZAxwB8ELEbC0wx63lhU"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.Telefono }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"recordatorio_24h_sandalo_esp\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Cliente }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.toDateTime().format('dd/MM/yyyy') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.toDateTime().format('hh:mm a') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Servicio }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Profesional }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        880,
+        608
+      ],
+      "id": "c0667fd1-4aa1-46f8-b764-b9052bdd69cf",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "content": "## Brayan\n**** )",
+        "height": 224,
+        "width": 1200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        592
+      ],
+      "id": "b81ad4b4-9acf-4a8c-9382-a88565e1f6ce",
+      "name": "Sticky Note2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Get many events2": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet1": {
+      "main": [
+        [
+          {
+            "node": "Get many events",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get many events2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get many events1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "56bc9ee7-1487-4a75-989d-7a77d69acc1f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8e81a069d62b8d8da21f9dddab2de75cc1d3b990f8f36af5262c34bb0abad06"
+  },
+  "id": "yKqWKWr4fQIEh1MQ",
+  "tags": [
+    {
+      "updatedAt": "2026-01-06T06:25:49.251Z",
+      "createdAt": "2026-01-06T06:25:49.251Z",
+      "id": "rP3My1e4kdI2Mk0F",
+      "name": "Sandalo Spa - C"
+    }
+  ]
+}

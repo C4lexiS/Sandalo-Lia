@@ -1,0 +1,130 @@
+{
+  "name": "tool_actualizar_citas24h",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Action",
+              "type": "any"
+            },
+            {
+              "name": "end_reagendar",
+              "type": "any"
+            },
+            {
+              "name": "start_reagendar",
+              "type": "any"
+            },
+            {
+              "name": "row_number",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "id": "935343b8-3d22-468f-adb6-f6e77874aadd",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -544,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs - Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "startIndex": "={{ $('When Executed by Another Workflow').item.json['row_number'] }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -272,
+        -160
+      ],
+      "id": "b279bc27-bb9e-4bd7-93ac-fe233a22a00a",
+      "name": "Delete rows or columns from sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Actualiza las citas reagendadas o canceladas en el sheets que usa el agente para listar las citas del cliente"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        -400
+      ],
+      "id": "6e19cd53-2db7-4e8b-b6fc-d68e744d95c8",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "Action": "Reagendar",
+          "end_reagendar": "2026-02-13 16:30:00",
+          "start_reagendar": "2026-02-13 15:00:00",
+          "row_number": "2"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3d3ced80-93b5-4be0-a94a-51da612e73a9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8e81a069d62b8d8da21f9dddab2de75cc1d3b990f8f36af5262c34bb0abad06"
+  },
+  "id": "xaXMwXAwScTRg8tG",
+  "tags": [
+    {
+      "updatedAt": "2026-01-06T06:25:49.251Z",
+      "createdAt": "2026-01-06T06:25:49.251Z",
+      "id": "rP3My1e4kdI2Mk0F",
+      "name": "Sandalo Spa - C"
+    }
+  ]
+}

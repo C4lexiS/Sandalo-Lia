@@ -1,0 +1,214 @@
+{
+  "name": "Subworkflow V2 - obtener detalles cita",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Telefono",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "id": "bd135134-3029-452f-8937-2ac50bc51668",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs - Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Telefono",
+              "lookupValue": "={{ $json.Telefono }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        384,
+        112
+      ],
+      "id": "e9ecc787-629f-4fe1-95df-b73dc57bc194",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "260c0d7e-d6a2-4182-92d0-75547113e1df",
+              "name": "event_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "5cd99bcc-b042-4e8c-97bc-01ca86687bfa",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "4377299e-231b-4678-ae1b-20af4c4df213",
+              "name": "Cliente",
+              "value": "={{ $json.Cliente }}",
+              "type": "string"
+            },
+            {
+              "id": "c9efdba3-a04b-43d0-bf65-fa0bcbf7ac34",
+              "name": "Telefono",
+              "value": "={{ $json.Telefono }}",
+              "type": "string"
+            },
+            {
+              "id": "25a8fc15-5ae5-4b01-bbaa-a6908b1d22c8",
+              "name": "Servicio",
+              "value": "={{ $json.Servicio }}",
+              "type": "string"
+            },
+            {
+              "id": "19e41e1c-7142-4e96-a3d5-353c2a2ba5f8",
+              "name": "Profesional",
+              "value": "={{ $json.Profesional }}",
+              "type": "string"
+            },
+            {
+              "id": "63d5f95e-00d1-48af-aa8d-5e3bff74bfd3",
+              "name": "start",
+              "value": "={{ $json.start }}",
+              "type": "string"
+            },
+            {
+              "id": "8397bb55-cf6e-4b44-b39a-ee271c7eb245",
+              "name": "end",
+              "value": "={{ $json.end }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        608,
+        112
+      ],
+      "id": "dacc1030-c249-4233-88e2-3b8f9d4a7b93",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        192
+      ],
+      "id": "6c791819-3981-4079-9574-bb953abedce9",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "Esta es la tool que usa el agente para buscar las citas agendadas por el numero de telefono)"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        544,
+        -160
+      ],
+      "id": "029bbc8e-c804-42b6-9021-e9be960d532c",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "0178bc33-7cf4-41fa-94c3-32b3cf1ef198",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8e81a069d62b8d8da21f9dddab2de75cc1d3b990f8f36af5262c34bb0abad06"
+  },
+  "id": "727PPnmpwzAL24CL",
+  "tags": [
+    {
+      "updatedAt": "2026-01-06T06:25:49.251Z",
+      "createdAt": "2026-01-06T06:25:49.251Z",
+      "id": "rP3My1e4kdI2Mk0F",
+      "name": "Sandalo Spa - C"
+    }
+  ]
+}

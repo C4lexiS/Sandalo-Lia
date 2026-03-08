@@ -1,0 +1,726 @@
+{
+  "name": "tool_reagendar",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "event_id",
+              "type": "any"
+            },
+            {
+              "name": "start",
+              "type": "any"
+            },
+            {
+              "name": "end",
+              "type": "any"
+            },
+            {
+              "name": "calendar"
+            },
+            {
+              "name": "session_id"
+            },
+            {
+              "name": "row_number",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4d581547-6f50-4a74-8b8a-cc237a13e725",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bf662fab-3d8c-4c78-ab27-f640134ae340",
+              "leftValue": "={{ $json.available }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "b968919c-8a8f-437b-bf12-1e3892a783e7",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar.trim() }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $('When Executed by Another Workflow').item.json.event_id.trim() }}",
+        "updateFields": {
+          "end": "={{ $('When Executed by Another Workflow').item.json.end }}",
+          "start": "={{ $('When Executed by Another Workflow').item.json.start }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1344,
+        -224
+      ],
+      "id": "1379d8f6-1dff-4a0d-a166-bb31287bd2b9",
+      "name": "Update an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf7d831e-2f94-4a36-a76c-eec345fdac62",
+              "name": "false",
+              "value": "={{ $json.available }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1072,
+        176
+      ],
+      "id": "5d6700a0-19a0-412c-a563-d46f122c7ff9",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs - Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "start": "={{ $('When Executed by Another Workflow').item.json.start }}",
+            "end": "={{ $('When Executed by Another Workflow').item.json.end }}",
+            "row_number": "={{ $('When Executed by Another Workflow').item.json['row_number'] }}"
+          },
+          "matchingColumns": [
+            "row_number"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Cliente",
+              "displayName": "Cliente",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Servicio",
+              "displayName": "Servicio",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Profesional",
+              "displayName": "Profesional",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "start",
+              "displayName": "start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "end",
+              "displayName": "end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "creator",
+              "displayName": "creator",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "created",
+              "displayName": "created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1584,
+        -224
+      ],
+      "id": "a725a551-417f-478f-b9ce-509c0deaf68b",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c76f1518-132c-4125-afa2-18a176374a1f",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.start}}",
+              "rightValue": "={{ $now.plus(1,'day').format('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1104,
+        -112
+      ],
+      "id": "6bdba243-5435-45ac-82f7-bb4068a9c86e",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs - Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "startIndex": "={{ $('When Executed by Another Workflow').item.json.row_number }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1584,
+        -16
+      ],
+      "id": "31abdd20-659f-4969-a473-5b75bea9088f",
+      "name": "Delete rows or columns from sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar.trim() }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $('When Executed by Another Workflow').item.json.event_id.trim() }}",
+        "updateFields": {
+          "end": "={{ $('When Executed by Another Workflow').item.json.end }}",
+          "start": "={{ $('When Executed by Another Workflow').item.json.start }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1344,
+        -16
+      ],
+      "id": "47471450-202f-4598-af12-67d8d936285e",
+      "name": "Update an event1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('When Executed by Another Workflow').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1840,
+        -16
+      ],
+      "id": "21785389-9256-4c84-bb40-b1ed3e29d9ee",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "05HUh2iOMSL1957p",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('When Executed by Another Workflow').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1808,
+        -240
+      ],
+      "id": "d9dbc92a-3e99-4e9e-8ffe-bfeed05566f9",
+      "name": "Execute a SQL query1",
+      "credentials": {
+        "postgres": {
+          "id": "05HUh2iOMSL1957p",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf7d831e-2f94-4a36-a76c-eec345fdac62",
+              "name": "true",
+              "value": "={{ $json.available }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2016,
+        -240
+      ],
+      "id": "ce2e11ae-06a0-4ecb-ae1e-6a824956e098",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf7d831e-2f94-4a36-a76c-eec345fdac62",
+              "name": "true",
+              "value": "={{ $json.available }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        2032,
+        -16
+      ],
+      "id": "0405e098-d43c-4aa9-81d7-b1e277b0a080",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calendar.trim() }}",
+          "mode": "id",
+          "__regex": "(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)"
+        },
+        "timeMin": "={{ DateTime.fromISO($json.start, { zone: 'America/New_York' }).toISO() }}",
+        "timeMax": "={{ DateTime.fromISO($json.end, { zone: 'America/New_York' }).toISO() }}",
+        "options": {
+          "timezone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "b24eeeb5-4cac-42f5-b295-c8fc1aa1be57",
+      "name": "Get availability in a calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar }}",
+          "mode": "id"
+        },
+        "limit": 1,
+        "timeMin": "={{ $('When Executed by Another Workflow').item.json.start }}",
+        "timeMax": "={{ $('When Executed by Another Workflow').item.json.end }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        656,
+        160
+      ],
+      "id": "9f318db0-8f31-4bde-8101-87951ff54040",
+      "name": "Get many events",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a8426b1f-d8fe-484f-9fce-48c7baab05a4",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.event_id.trim() }}",
+              "rightValue": "={{ $json.id.trim() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        864,
+        160
+      ],
+      "id": "fcd303aa-8dc6-42b8-bdb1-8ccd62fa6314",
+      "name": "If2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get availability in a calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Update an event",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update an event1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an event": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an event1": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet1": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get availability in a calendar": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4a3b2ce3-f217-43fc-8eab-bdca1c1a4956",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8e81a069d62b8d8da21f9dddab2de75cc1d3b990f8f36af5262c34bb0abad06"
+  },
+  "id": "ltjiu3D3a67TY9YC",
+  "tags": []
+}

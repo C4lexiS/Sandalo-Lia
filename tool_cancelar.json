@@ -1,0 +1,165 @@
+{
+  "name": "tool_cancelar",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "row_number",
+              "type": "any"
+            },
+            {
+              "name": "event_id",
+              "type": "any"
+            },
+            {
+              "name": "calendar",
+              "type": "any"
+            },
+            {
+              "name": "session_id",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4710150a-27e3-417e-9327-b05489318dcb",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calendar }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $json.event_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "2d4d5b84-fd07-4f98-8051-185a15e84e38",
+      "name": "Delete an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24Hs - Test",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "startIndex": "={{ $('When Executed by Another Workflow').item.json.row_number }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        416,
+        0
+      ],
+      "id": "9dde8fe3-c523-4b18-93bc-33c661919874",
+      "name": "Delete rows or columns from sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "BbuEgava4So6qCzg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('When Executed by Another Workflow').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        624,
+        0
+      ],
+      "id": "e4ff205e-cf90-47c5-8178-726fad97d17f",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "05HUh2iOMSL1957p",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Delete an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete an event": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "39273e57-6773-4053-89db-ec94942b8905",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8e81a069d62b8d8da21f9dddab2de75cc1d3b990f8f36af5262c34bb0abad06"
+  },
+  "id": "GdgvsIG0LPsxyeKs",
+  "tags": []
+}

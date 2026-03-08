@@ -1,0 +1,156 @@
+{
+  "name": "Disponibilidad",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Calendar",
+              "type": "any"
+            },
+            {
+              "name": "event_id",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -112,
+        80
+      ],
+      "id": "74042686-ffc6-4b45-a7e4-162829fa4cb8",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.Calendar.trim() }}",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.plus(1, 'day').startOf('day') }}",
+        "timeMax": "={{ $now.plus({ month: 1 }).endOf('day') }}",
+        "options": {
+          "orderBy": "startTime",
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        384,
+        80
+      ],
+      "id": "5cdcbbfd-43e2-4f28-89bf-d127372194c1",
+      "name": "Get many events",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- CONFIGURACIÓN ---\nconst TIMEZONE = 'America/New_York';\nconst START_HOUR = 8;  // 8 AM\nconst END_HOUR = 18;   // 6 PM\nconst WORK_DAYS = [1, 2, 3, 4, 5, 6]; // 1=Lunes ... 6=Sábado\n\n\n// =============================\n// OBTENER Y PREPARAR EVENTOS\n// =============================\n\n// Todos los eventos que entran al nodo\nconst allEvents = $input.all().map(item => item.json);\n\n// ID del evento que se está reagendando (viene del nodo Get an event)\nconst eventIdToIgnore = $node[\"Get an event\"].json.id;\n\n// Buscar ese evento en la lista\nconst eventToReschedule = allEvents.find(e => e.id === eventIdToIgnore);\n\n// Determinar si se debe excluir\nlet eventsInput;\n\nif (eventToReschedule && eventToReschedule.summary !== \"Not available\") {\n  // Es una cita normal → se excluye del cálculo\n  eventsInput = allEvents.filter(e => e.id !== eventIdToIgnore);\n} else {\n  // Es \"Not available\" → NO se excluye nada\n  eventsInput = allEvents;\n}\n\n\n// =============================\n// CALCULAR DISPONIBILIDAD\n// =============================\n\n// Formateador para fechas en NY\nconst nyFormatter = new Intl.DateTimeFormat('en-CA', {\n  timeZone: TIMEZONE,\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit'\n});\n\n// Hoy en NY (YYYY-MM-DD)\nconst todayNYString = nyFormatter.format(new Date());\n\n// Mañana en NY\nconst startDate = new Date(`${todayNYString}T00:00:00`);\nstartDate.setDate(startDate.getDate() + 1);\n\n// Rango 30 días\nconst endDate = new Date(startDate);\nendDate.setDate(startDate.getDate() + 30);\n\nlet finalAvailability = [];\nlet currentLoopDate = new Date(startDate);\n\nwhile (currentLoopDate <= endDate) {\n\n  const loopDateNY = nyFormatter.format(currentLoopDate);\n\n  // Saltar hoy\n  if (loopDateNY === todayNYString) {\n    currentLoopDate.setDate(currentLoopDate.getDate() + 1);\n    continue;\n  }\n\n  const dayOfWeek = new Date(loopDateNY + 'T00:00:00').getDay();\n\n  if (WORK_DAYS.includes(dayOfWeek)) {\n\n    const currentDateString = loopDateNY;\n\n    // Eventos del día actual\n    const daysEvents = eventsInput.filter(e => {\n      if (!e.start || !e.start.dateTime) return false;\n      const evtDate = new Date(e.start.dateTime);\n      const evtDateNY = nyFormatter.format(evtDate);\n      return evtDateNY === currentDateString;\n    });\n\n    const dayStartMins = START_HOUR * 60;\n    const dayEndMins = END_HOUR * 60;\n\n    let slots = [{ start: dayStartMins, end: dayEndMins }];\n\n    daysEvents.forEach(evt => {\n\n      const evtStart = new Date(evt.start.dateTime);\n      const evtEnd = new Date(evt.end.dateTime);\n\n      const getMins = (date) => {\n        const parts = new Intl.DateTimeFormat('en-US', {\n          timeZone: TIMEZONE,\n          hour: 'numeric',\n          minute: 'numeric',\n          hour12: false\n        }).formatToParts(date);\n\n        let h = parseInt(parts.find(p => p.type === 'hour').value);\n        if (h === 24) h = 0;\n\n        const m = parseInt(parts.find(p => p.type === 'minute').value);\n        return (h * 60) + m;\n      };\n\n      const eStartMins = getMins(evtStart);\n      const eEndMins = getMins(evtEnd);\n\n      let newSlots = [];\n\n      slots.forEach(slot => {\n\n        if (eEndMins <= slot.start || eStartMins >= slot.end) {\n          newSlots.push(slot);\n        } else {\n\n          if (slot.start < eStartMins) {\n            newSlots.push({ start: slot.start, end: eStartMins });\n          }\n\n          if (slot.end > eEndMins) {\n            newSlots.push({ start: eEndMins, end: slot.end });\n          }\n        }\n      });\n\n      slots = newSlots;\n    });\n\n    if (slots.length > 0) {\n\n      slots.sort((a, b) => a.start - b.start);\n\n      const minsToTime = (mins) => {\n        const h = Math.floor(mins / 60);\n        const m = mins % 60;\n        const ampm = h >= 12 ? 'PM' : 'AM';\n        const h12 = h % 12 || 12;\n        return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;\n      };\n\n      const disponibilidad = slots.map(s => ({\n        start: minsToTime(s.start),\n        end: minsToTime(s.end),\n        Disponibilidad: `${minsToTime(s.start)} – ${minsToTime(s.end)}`\n      }));\n\n      finalAvailability.push({\n        date: currentDateString,\n        disponibilidad: disponibilidad\n      });\n    }\n  }\n\n  currentLoopDate.setDate(currentLoopDate.getDate() + 1);\n}\n\nreturn finalAvailability;\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        80
+      ],
+      "id": "2cded8e1-62bc-4c12-bead-b5bd100eab8a",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.Calendar.trim() }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $('When Executed by Another Workflow').item.json.event_id.trim() }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        80
+      ],
+      "id": "8e26ba19-bfa2-4635-9d36-076ddff4d02c",
+      "name": "Get an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        []
+      ]
+    },
+    "Get an event": {
+      "main": [
+        [
+          {
+            "node": "Get many events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9b328f1b-c028-4894-9739-ed1530d53913",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8e81a069d62b8d8da21f9dddab2de75cc1d3b990f8f36af5262c34bb0abad06"
+  },
+  "id": "TjQJFDdKfx7g4mHq",
+  "tags": []
+}
