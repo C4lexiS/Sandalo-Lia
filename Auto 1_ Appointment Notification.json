@@ -1,0 +1,532 @@
+{
+  "name": "Auto 1: Appointment Notification",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -704,
+        608
+      ],
+      "id": "3d5666c0-0a30-43bc-bdc6-e1ea85788798",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/978507082009213/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAQZCDXJWDsIBQcu6ZBDcw99dZAIJkHVzz61iEtbkxDzaXXf2K2fEJJhZBt1x34ehAVPHarfH6n5TKwEZCsLIVfOmWJWtKYRnvnonBYl3a91yCf09f483D1ZBUL4aTbHIT9h7D2BcxwiAIzZBlRYmlv6CrzTFQeqDE2LYZBIYYDukvKBylKvzbDZB0GqPReBgn9ZAxwB8ELEbC0wx63lhU"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.summary.split(',')[2].trim() }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"confirmacion_sandalospa_esp_v3\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.summary.split(',')[0].trim() }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.summary.split(',')[1].trim() }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.dateTime.toDateTime().format('dd/MM/yyyy') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.dateTime.toDateTime().format('hh:mm a') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.organizer.displayName }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        288
+      ],
+      "id": "73226ad5-4ad2-4bcb-a1a5-a7bace9ede2f",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b811a820-9de1-485e-b366-f34745ed6c6b",
+              "leftValue": "={{ $json.created }}",
+              "rightValue": "={{ $now.minus({ minutes: 1 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        256,
+        304
+      ],
+      "id": "71f7b3d1-44f8-4299-931a-07dffabba3bd",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aa7d0ee6-f9c3-4c8c-bdb5-0300ded2e722",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": ",",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        384
+      ],
+      "id": "6a2c60e8-2623-4edc-a2dc-dea389c0f79c",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b811a820-9de1-485e-b366-f34745ed6c6b",
+              "leftValue": "={{ $json.created }}",
+              "rightValue": "={{ $now.minus({ minutes: 1 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        256,
+        576
+      ],
+      "id": "5c8b76fc-2511-4f77-9a65-b7504bc2a216",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aa7d0ee6-f9c3-4c8c-bdb5-0300ded2e722",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": ",",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        656
+      ],
+      "id": "07248f55-117b-4b14-8535-f5b70c4e9e58",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b811a820-9de1-485e-b366-f34745ed6c6b",
+              "leftValue": "={{ $json.created }}",
+              "rightValue": "={{ $now.minus({ minutes: 1 }) }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "after"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        256,
+        848
+      ],
+      "id": "46f1d603-9445-4ec5-81d1-93be3c30f410",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aa7d0ee6-f9c3-4c8c-bdb5-0300ded2e722",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": ",",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        32,
+        928
+      ],
+      "id": "1a0a631e-9889-4f2f-9d2f-8386e1ce4b78",
+      "name": "If5"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "9edc9872f67f0db25c5c7e582ffd558f55b5dc2564bd949be94683d77f25741e@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Alejandra"
+        },
+        "timeMin": "={{ $now.minus({ days: 1 }) }}",
+        "timeMax": "={{ $now.plus({ days: 30 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -176,
+        384
+      ],
+      "id": "432c1f72-107f-4b87-b966-0db2d50c0c56",
+      "name": "Aleja",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "f88ab9772e9c026f25509e3a69bcf2ba41fd15c2a049559c5184433ff9d5ee76@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Alejandro"
+        },
+        "timeMin": "={{ $now.minus({ days: 1 }) }}",
+        "timeMax": "={{ $now.plus({ days: 30 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -176,
+        656
+      ],
+      "id": "a6e5bfe5-110b-4dd7-a084-a32fd9370e8e",
+      "name": "Alejo",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "8a5b1ae840c1e0c94a3b5d756e251860adf82ead71b41c22fce912773029c9d5@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Brayan"
+        },
+        "timeMin": "={{ $now.minus({ days: 1 }) }}",
+        "timeMax": "={{ $now.plus({ days: 30 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -176,
+        928
+      ],
+      "id": "e30e8360-3c80-48d4-bd4a-5440801e2ded",
+      "name": "Bryan",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8cV5ROvRbPqzXLCA",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/978507082009213/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAQZCDXJWDsIBQcu6ZBDcw99dZAIJkHVzz61iEtbkxDzaXXf2K2fEJJhZBt1x34ehAVPHarfH6n5TKwEZCsLIVfOmWJWtKYRnvnonBYl3a91yCf09f483D1ZBUL4aTbHIT9h7D2BcxwiAIzZBlRYmlv6CrzTFQeqDE2LYZBIYYDukvKBylKvzbDZB0GqPReBgn9ZAxwB8ELEbC0wx63lhU"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.summary.split(',')[2].trim() }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"confirmacion_sandalospa_esp_v3\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.summary.split(',')[0].trim() }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.summary.split(',')[1].trim() }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.dateTime.toDateTime().format('dd/MM/yyyy') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.dateTime.toDateTime().format('hh:mm a') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.organizer.displayName }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        560
+      ],
+      "id": "dc13f9ce-1829-4153-93f4-47688509a036",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/978507082009213/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAQZCDXJWDsIBQcu6ZBDcw99dZAIJkHVzz61iEtbkxDzaXXf2K2fEJJhZBt1x34ehAVPHarfH6n5TKwEZCsLIVfOmWJWtKYRnvnonBYl3a91yCf09f483D1ZBUL4aTbHIT9h7D2BcxwiAIzZBlRYmlv6CrzTFQeqDE2LYZBIYYDukvKBylKvzbDZB0GqPReBgn9ZAxwB8ELEbC0wx63lhU"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json.summary.split(',')[2].trim() }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"confirmacion_sandalospa_esp_v3\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.summary.split(',')[0].trim() }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.summary.split(',')[1].trim() }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.dateTime.toDateTime().format('dd/MM/yyyy') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.start.dateTime.toDateTime().format('hh:mm a') }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.organizer.displayName }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        512,
+        832
+      ],
+      "id": "4808825a-3cf6-45c6-93cf-e6ea88d3ed5a",
+      "name": "HTTP Request2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Aleja",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Alejo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bryan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aleja": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alejo": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bryan": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "ec1ab2d4-47d3-4490-82d3-60bf06eda538",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e8e81a069d62b8d8da21f9dddab2de75cc1d3b990f8f36af5262c34bb0abad06"
+  },
+  "id": "T8VxbJsRJ35M98Wo",
+  "tags": [
+    {
+      "updatedAt": "2026-01-06T06:25:49.251Z",
+      "createdAt": "2026-01-06T06:25:49.251Z",
+      "id": "rP3My1e4kdI2Mk0F",
+      "name": "Sandalo Spa - C"
+    }
+  ]
+}
