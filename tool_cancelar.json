@@ -1,0 +1,319 @@
+{
+  "name": "tool_cancelar",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "row_number",
+              "type": "any"
+            },
+            {
+              "name": "event_id",
+              "type": "any"
+            },
+            {
+              "name": "calendar",
+              "type": "any"
+            },
+            {
+              "name": "session_id",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        -336
+      ],
+      "id": "0eb57638-1667-4168-ba39-702ee70512a2",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $('When Executed by Another Workflow').item.json.event_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        -336
+      ],
+      "id": "7c0938b4-191b-474a-ab7d-86d0f32fcf53",
+      "name": "Delete an event",
+      "retryOnFail": true,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24h - Prod",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "startIndex": "={{ $('When Executed by Another Workflow').item.json.row_number }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        944,
+        -336
+      ],
+      "id": "026a7dc2-c10c-4fb7-83a4-3eeaeedaae4a",
+      "name": "Delete rows or columns from sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bfUUqddkHkczSi4E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('When Executed by Another Workflow').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        1392,
+        -336
+      ],
+      "id": "7b598699-f3a8-43f8-9008-7e01f44ec144",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/968516479684593/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAbv6Yk59GEBR0OjxZAJluqnkJ5ypjFSyfSkkdWhnowSjqYBJdz1tYvlWlwZBj9kE9WqFuzWZA7E5MH5TzRYz06JVbHq7b4ZBEu5mkDpjRPZCQkfNucyt5yZByZArucs6qRZATAGb32rdv0EZCSZAqZADjiuTOWqZAiAkPX8aFEIDxyTTP6XqpE75jrZBGMrDfgcgVZB8YNQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"573005498418\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"prod_notificacion_cancelacion\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Get row(s) in sheet').item.json.Professional }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Get row(s) in sheet').item.json.Name }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Get row(s) in sheet').item.json['Appointment type'] }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Get row(s) in sheet').item.json.Date }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Get row(s) in sheet').item.json.StartTime }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1152,
+        -336
+      ],
+      "id": "d24d946d-4681-4f06-97dc-fcde5e0f0b2b",
+      "name": "HTTP Request21"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24h - Prod",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Id",
+              "lookupValue": "={{ $json.event_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        464,
+        -336
+      ],
+      "id": "5c17294f-cb39-486d-af08-7c5807d38000",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bfUUqddkHkczSi4E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d1960231-f4d5-412d-8c05-5d12e5265ae4",
+              "name": "Output",
+              "value": "True",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1600,
+        -336
+      ],
+      "id": "1550e603-6041-4024-9ca2-b8e5db132375",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "content": "## Chat regular de Sandalo\n\n8574683230\n\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1088,
+        -560
+      ],
+      "id": "569e4c19-eb42-4555-ab83-def48eaa9b5a",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "row_number": "9",
+          "event_id": "0skuo20o23hvg6a7d1m00vh8vi",
+          "calendar": "b0b9e15144b7a2119ddfef331365af4a1745a2ebcf8becf5de14000e45e00c32@group.calendar.google.com",
+          "session_id": "1"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete an event": {
+      "main": [
+        [
+          {
+            "node": "Delete rows or columns from sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request21",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request21": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Delete an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "bd4e7f8e-0b54-4437-a575-9896b60bd254",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2fcd2bbebfa243477c73eb44103e264531a434e82d48daeed5c042e60efb4ab5"
+  },
+  "nodeGroups": [],
+  "id": "bxzFg6V0ljasjVvU",
+  "tags": []
+}

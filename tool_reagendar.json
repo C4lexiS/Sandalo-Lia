@@ -1,0 +1,1150 @@
+{
+  "name": "tool_reagendar",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "Numero para envio de not de cancelaciones o reagen: 85746832330",
+        "height": 704,
+        "width": 256,
+        "color": "#7B780E"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        144,
+        1024
+      ],
+      "id": "bb1ce312-9fe6-47f1-9d7f-86c16951428c",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "event_id",
+              "type": "any"
+            },
+            {
+              "name": "start",
+              "type": "any"
+            },
+            {
+              "name": "end",
+              "type": "any"
+            },
+            {
+              "name": "calendar"
+            },
+            {
+              "name": "session_id"
+            },
+            {
+              "name": "row_number",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -2352,
+        1472
+      ],
+      "id": "3931306d-c5e8-456a-a514-f506c29f4c53",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "documentId": {
+          "__rl": true,
+          "value": "1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24h - Prod",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit#gid=0"
+        },
+        "startIndex": "={{ $('When Executed by Another Workflow').item.json.row_number }}"
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        560,
+        1488
+      ],
+      "id": "2741f929-8a10-448f-ae7a-632910108dd8",
+      "name": "Delete rows or columns from sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bfUUqddkHkczSi4E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "bf662fab-3d8c-4c78-ab27-f640134ae340",
+              "leftValue": "={{ $json.available }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1824,
+        1472
+      ],
+      "id": "9c319294-e20d-48ea-aba7-5b33a45995b7",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar.trim() }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $('When Executed by Another Workflow').item.json.event_id.trim() }}",
+        "updateFields": {
+          "end": "={{ $('When Executed by Another Workflow').item.json.end }}",
+          "start": "={{ $('When Executed by Another Workflow').item.json.start }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        1264
+      ],
+      "id": "e476549d-4bbf-44ff-9a07-a142c2c78762",
+      "name": "Update an event2",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24h - Prod",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "StartTime": "={{ $('When Executed by Another Workflow').item.json.start.toDateTime().format('hh:mm') }}",
+            "EndTime": "={{ $('When Executed by Another Workflow').item.json.end.toDateTime().format('hh:mm') }}",
+            "Id": "={{ $('When Executed by Another Workflow').item.json.event_id }}",
+            "Date": "={{ $('When Executed by Another Workflow').item.json.start.toDateTime().format('yyyy-MM-dd') }}"
+          },
+          "matchingColumns": [
+            "Id"
+          ],
+          "schema": [
+            {
+              "id": "Creation date",
+              "displayName": "Creation date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Appointment type",
+              "displayName": "Appointment type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Professional",
+              "displayName": "Professional",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "StartTime",
+              "displayName": "StartTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "EndTime",
+              "displayName": "EndTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Local26",
+              "displayName": "Local26",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        480,
+        1264
+      ],
+      "id": "f44d3bed-df47-4dc1-9aef-aee23a1b899a",
+      "name": "Update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bfUUqddkHkczSi4E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "c76f1518-132c-4125-afa2-18a176374a1f",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.start}}",
+              "rightValue": "={{ $now.plus(1,'day').format('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1136,
+        1360
+      ],
+      "id": "a8b3df9c-2c4b-4ae7-b415-4d73df6197ad",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar.trim() }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $('When Executed by Another Workflow').item.json.event_id.trim() }}",
+        "updateFields": {
+          "end": "={{ $('When Executed by Another Workflow').item.json.end }}",
+          "start": "={{ $('When Executed by Another Workflow').item.json.start }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -16,
+        1488
+      ],
+      "id": "2c4ae3c5-3a15-47c1-8b8d-26e60ca573ce",
+      "name": "Update an event3",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('When Executed by Another Workflow').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        816,
+        1488
+      ],
+      "id": "0f819ca3-da9f-4597-92c5-d1e26bc701d5",
+      "name": "Execute a SQL query2",
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('When Executed by Another Workflow').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        704,
+        1264
+      ],
+      "id": "42acc5fd-2755-448f-bc73-ef9b2a1da9fe",
+      "name": "Execute a SQL query3",
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf7d831e-2f94-4a36-a76c-eec345fdac62",
+              "name": "true",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        912,
+        1264
+      ],
+      "id": "2798dfa6-318d-4cbc-ad1a-e6c1bf528921",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "cf7d831e-2f94-4a36-a76c-eec345fdac62",
+              "name": "true",
+              "value": "={{ $json.success }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1008,
+        1488
+      ],
+      "id": "f6609f91-7c8b-4b22-a793-90e4d0e3b2ea",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calendar.trim() }}",
+          "mode": "id",
+          "__regex": "(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)"
+        },
+        "timeMin": "={{ DateTime.fromISO($json.start, { zone: 'America/New_York' }).toISO() }}",
+        "timeMax": "={{ DateTime.fromISO($json.end, { zone: 'America/New_York' }).toISO() }}",
+        "options": {
+          "timezone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -2032,
+        1472
+      ],
+      "id": "3ec3d346-4a1c-4fb5-bad2-0718b5739f34",
+      "name": "Get availability in a calendar1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar }}",
+          "mode": "id"
+        },
+        "limit": 1,
+        "timeMin": "={{ $('When Executed by Another Workflow').item.json.start }}",
+        "timeMax": "={{ $('When Executed by Another Workflow').item.json.end }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1584,
+        1632
+      ],
+      "id": "b83e4cdc-fd77-4f11-ae5c-0eea9d2e2e9e",
+      "name": "Get many events1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "a8426b1f-d8fe-484f-9fce-48c7baab05a4",
+              "leftValue": "={{ $('When Executed by Another Workflow').item.json.event_id.trim() }}",
+              "rightValue": "={{ $json.id.trim() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1376,
+        1632
+      ],
+      "id": "cbc70b73-a84d-4b23-b70a-fd995038eb3e",
+      "name": "If5"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/968516479684593/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAbv6Yk59GEBR0OjxZAJluqnkJ5ypjFSyfSkkdWhnowSjqYBJdz1tYvlWlwZBj9kE9WqFuzWZA7E5MH5TzRYz06JVbHq7b4ZBEu5mkDpjRPZCQkfNucyt5yZByZArucs6qRZATAGb32rdv0EZCSZAqZADjiuTOWqZAiAkPX8aFEIDxyTTP6XqpE75jrZBGMrDfgcgVZB8YNQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"573005498418\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"prod_notificacion_reagendamiento\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.Profesional }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.Nombre }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.Servicio }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.oldDate }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.oldTime }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.Profesional }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.Servicio }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.newDate }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields7').item.json.newStart }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        1360
+      ],
+      "id": "f3522496-b78f-429e-846f-f39e0b9c9821",
+      "name": "HTTP Request2",
+      "retryOnFail": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $('When Executed by Another Workflow').item.json.event_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -912,
+        1488
+      ],
+      "id": "f01ec9f6-250c-470b-ab9a-ec4dcbc18c09",
+      "name": "Get an event2",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8cd183a9-0eeb-4429-9ce8-aa215842aceb",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "483522de-3d9c-46ce-a98a-71e83285de7d",
+              "name": "Nombre",
+              "value": "={{ $json.summary_limpio.split(\"-\")[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "cf6df567-06b7-41e3-88b8-45e9e7563355",
+              "name": "Servicio",
+              "value": "={{ $json.summary_limpio.split(\"-\")[1] }}",
+              "type": "string"
+            },
+            {
+              "id": "d1fdc529-6fe9-436d-83de-0cb813ed2155",
+              "name": "oldDate",
+              "value": "={{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "39422593-3e4c-4fa1-8597-bcd908545dea",
+              "name": "oldTime",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "852c5305-bcce-4817-9faf-9ae37f0cb3f3",
+              "name": "newDate",
+              "value": "={{ $('When Executed by Another Workflow').item.json.start.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "97e0254e-5656-474d-a29c-0a2194d60404",
+              "name": "newStart",
+              "value": "={{ $('When Executed by Another Workflow').item.json.start.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -272,
+        1488
+      ],
+      "id": "69641815-8b67-489c-89d2-1084db5057f6",
+      "name": "Edit Fields7"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const summary = item.json.summary || \"\";\n  const startDateTime = item.json.start?.dateTime;\n\n  // 1. Separar por guión con o sin espacios\n  let partes = summary.split(/\\s*-\\s*/).map(p => p.trim()).filter(p => p !== \"\");\n\n  // 2. Eliminar emojis (partes sin letras ni dígitos)\n  partes = partes.filter(p => /[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/.test(p));\n\n  // 3. Helpers\n  const esTelefono = (p) => /^[\\d\\s\\+\\(\\)\\-]{6,}$/.test(p);\n  const esLocal = (p) => /^local\\d*$/i.test(p.trim());\n\n  // 4. Encontrar índice del teléfono\n  const indiceTel = partes.findIndex(p => esTelefono(p));\n\n  let partesFinales = [];\n\n  if (indiceTel !== -1) {\n    // Siempre tomar SOLO las 2 partes justo antes del teléfono (Nombre y Servicio)\n    const nombre = partes[indiceTel - 2];\n    const servicio = partes[indiceTel - 1];\n    const tel = partes[indiceTel];\n    const despuesDelTel = partes.slice(indiceTel + 1);\n\n    // ¿Hay Local justo después del teléfono?\n    const localParte = despuesDelTel.find(p => esLocal(p));\n\n    partesFinales = [nombre, servicio, tel].filter(Boolean);\n    if (localParte) partesFinales.push(localParte);\n\n  } else {\n    // Fallback: tomar primeras 3 partes\n    partesFinales = partes.slice(0, 3);\n  }\n\n  const finalSummary = partesFinales.join(' - ');\n\n  // 5. Procesamiento de fecha y hora\n  let fechaFormateada = \"\";\n  let horaFormateada = \"\";\n  if (startDateTime) {\n    const date = new Date(startDateTime);\n    const mm = String(date.getMonth() + 1).padStart(2, '0');\n    const dd = String(date.getDate()).padStart(2, '0');\n    const yyyy = date.getFullYear();\n    fechaFormateada = `${mm} ${dd} ${yyyy}`;\n    horaFormateada = date.toLocaleTimeString('en-US', {\n      hour: '2-digit',\n      minute: '2-digit',\n      hour12: true\n    });\n  }\n\n  return {\n    json: {\n      ...item.json,\n      summary_limpio: finalSummary,\n      guiones_detectados: (summary.match(/-/g) || []).length,\n      fecha_cita: fechaFormateada,\n      hora_cita: horaFormateada\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -592,
+        1488
+      ],
+      "id": "c289b988-19de-4d6b-805d-2f3c46b9f5ce",
+      "name": "Code in JavaScript10"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/968516479684593/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAbv6Yk59GEBR0OjxZAJluqnkJ5ypjFSyfSkkdWhnowSjqYBJdz1tYvlWlwZBj9kE9WqFuzWZA7E5MH5TzRYz06JVbHq7b4ZBEu5mkDpjRPZCQkfNucyt5yZByZArucs6qRZATAGb32rdv0EZCSZAqZADjiuTOWqZAiAkPX8aFEIDxyTTP6XqpE75jrZBGMrDfgcgVZB8YNQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"573005498418\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"prod_notificacion_reagendamiento\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.Profesional }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.Nombre }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.Servicio }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.oldDate }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.oldTime }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.Profesional }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.Servicio }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.newDate }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $('Edit Fields8').item.json.newStart }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        1120
+      ],
+      "id": "d86241d5-6146-4137-9e89-9ea748d00b91",
+      "name": "HTTP Request3",
+      "retryOnFail": true,
+      "maxTries": 3,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $('When Executed by Another Workflow').item.json.event_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -896,
+        1264
+      ],
+      "id": "2ae9fe40-96f1-438e-8e6f-0fd0be780ff9",
+      "name": "Get an event3",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "8cd183a9-0eeb-4429-9ce8-aa215842aceb",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "483522de-3d9c-46ce-a98a-71e83285de7d",
+              "name": "Nombre",
+              "value": "={{ $json.summary_limpio.split(\"-\")[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "cf6df567-06b7-41e3-88b8-45e9e7563355",
+              "name": "Servicio",
+              "value": "={{ $json.summary_limpio.split(\"-\")[1] }}",
+              "type": "string"
+            },
+            {
+              "id": "d1fdc529-6fe9-436d-83de-0cb813ed2155",
+              "name": "oldDate",
+              "value": "={{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "39422593-3e4c-4fa1-8597-bcd908545dea",
+              "name": "oldTime",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "852c5305-bcce-4817-9faf-9ae37f0cb3f3",
+              "name": "newDate",
+              "value": "={{ $('When Executed by Another Workflow').item.json.start.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "97e0254e-5656-474d-a29c-0a2194d60404",
+              "name": "newStart",
+              "value": "={{ $('When Executed by Another Workflow').item.json.start.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -288,
+        1264
+      ],
+      "id": "4df6ae23-6f9b-4487-8f8b-e4d3045e7c85",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "jsCode": "return $input.all().map(item => {\n  const summary = item.json.summary || \"\";\n  const startDateTime = item.json.start?.dateTime;\n\n  // 1. Separar por guión con o sin espacios\n  let partes = summary.split(/\\s*-\\s*/).map(p => p.trim()).filter(p => p !== \"\");\n\n  // 2. Eliminar emojis (partes sin letras ni dígitos)\n  partes = partes.filter(p => /[a-zA-ZáéíóúÁÉÍÓÚñÑ0-9]/.test(p));\n\n  // 3. Helpers\n  const esTelefono = (p) => /^[\\d\\s\\+\\(\\)\\-]{6,}$/.test(p);\n  const esLocal = (p) => /^local\\d*$/i.test(p.trim());\n\n  // 4. Encontrar índice del teléfono\n  const indiceTel = partes.findIndex(p => esTelefono(p));\n\n  let partesFinales = [];\n\n  if (indiceTel !== -1) {\n    // Siempre tomar SOLO las 2 partes justo antes del teléfono (Nombre y Servicio)\n    const nombre = partes[indiceTel - 2];\n    const servicio = partes[indiceTel - 1];\n    const tel = partes[indiceTel];\n    const despuesDelTel = partes.slice(indiceTel + 1);\n\n    // ¿Hay Local justo después del teléfono?\n    const localParte = despuesDelTel.find(p => esLocal(p));\n\n    partesFinales = [nombre, servicio, tel].filter(Boolean);\n    if (localParte) partesFinales.push(localParte);\n\n  } else {\n    // Fallback: tomar primeras 3 partes\n    partesFinales = partes.slice(0, 3);\n  }\n\n  const finalSummary = partesFinales.join(' - ');\n\n  // 5. Procesamiento de fecha y hora\n  let fechaFormateada = \"\";\n  let horaFormateada = \"\";\n  if (startDateTime) {\n    const date = new Date(startDateTime);\n    const mm = String(date.getMonth() + 1).padStart(2, '0');\n    const dd = String(date.getDate()).padStart(2, '0');\n    const yyyy = date.getFullYear();\n    fechaFormateada = `${mm} ${dd} ${yyyy}`;\n    horaFormateada = date.toLocaleTimeString('en-US', {\n      hour: '2-digit',\n      minute: '2-digit',\n      hour12: true\n    });\n  }\n\n  return {\n    json: {\n      ...item.json,\n      summary_limpio: finalSummary,\n      guiones_detectados: (summary.match(/-/g) || []).length,\n      fecha_cita: fechaFormateada,\n      hora_cita: horaFormateada\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -592,
+        1264
+      ],
+      "id": "5ff10218-ced8-4cd5-85ba-b688e0934372",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "content": "Si reagenda para el mismo dia actualiza el sheet si no lo borra "
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -1024,
+        1120
+      ],
+      "id": "8e764dd3-1d70-40fe-b6c3-706e81fd38f3",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "9LDv9YSMsBkEGTZG",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/9LDv9YSMsBkEGTZG",
+          "cachedResultName": "tool_disponibilidad"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ $json.id }}",
+            "calendar_id": "={{ $json.organizer.email }}",
+            "ProfetionalName": "={{ $json.organizer.displayName }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ProfetionalName",
+              "displayName": "ProfetionalName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calendar_id",
+              "displayName": "calendar_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.3,
+      "position": [
+        -1024,
+        1728
+      ],
+      "id": "b05a3b69-b196-47f8-9263-fe299ddcd07b",
+      "name": "Call 'tool_disponibilidad'1"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "event_id": "4vtejat1n22tmulq1lf974fgtb",
+          "start": "2026-08-31T11:00:00.000-04:00",
+          "end": "2026-08-31T12:00:00.000-04:00",
+          "calendar": "fe45d020a80716deb015ce4f21a4d59190e246dc4272b85a92e447be2bf5e119@group.calendar.google.com",
+          "session_id": "1",
+          "row_number": "2"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get availability in a calendar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete rows or columns from sheet1": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get many events1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an event2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet2": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Get an event3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get an event2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an event3": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Delete rows or columns from sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get availability in a calendar1": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events1": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Call 'tool_disponibilidad'1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get an event2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields7": {
+      "main": [
+        [
+          {
+            "node": "Update an event3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript10": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get an event3": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Update an event2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "67ecc2bf-9b83-4821-b9c8-0f08d75d065f",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2fcd2bbebfa243477c73eb44103e264531a434e82d48daeed5c042e60efb4ab5"
+  },
+  "nodeGroups": [],
+  "id": "WlgqBqIFsyvMWax1",
+  "tags": []
+}

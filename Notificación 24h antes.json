@@ -1,0 +1,3367 @@
+{
+  "name": "Notificación 24h antes",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -1808,
+        2144
+      ],
+      "id": "7d655f2e-1aff-42c7-9feb-2c7542d26bda",
+      "name": "Schedule Trigger2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7373a346-1f6a-48c9-a3dd-2b9de0d4ba04",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": "=-",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -1136,
+        2144
+      ],
+      "id": "53db4cc9-ab3d-4827-8ab3-620b250a18bc",
+      "name": "If6"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24h - Prod",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Codigo": "={{ $json.Codigo }}",
+            "CalendarId": "={{ $json.CalendarId }}",
+            "Name": "={{ $json.Nombre }}",
+            "Appointment type": "={{ $json.Servicio }}",
+            "Professional": "={{ $json.Profesional }}",
+            "Phone number": "={{ $json.Numero }}",
+            "Date": "={{ $json.FechaInicio }}",
+            "StartTime": "={{ $json.HoraInicio }}",
+            "EndTime": "={{ $json.HoraFin }}",
+            "Id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Appointment type",
+              "displayName": "Appointment type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Professional",
+              "displayName": "Professional",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "StartTime",
+              "displayName": "StartTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "EndTime",
+              "displayName": "EndTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Codigo",
+              "displayName": "Codigo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CalendarId",
+              "displayName": "CalendarId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1008,
+        2208
+      ],
+      "id": "3a7132b4-1ee2-497d-90c9-8d16304571a8",
+      "name": "Append row in sheet6",
+      "executeOnce": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bfUUqddkHkczSi4E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24h - Prod",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Codigo": "={{ $json.Codigo }}",
+            "CalendarId": "={{ $json.CalendarId }}",
+            "Name": "={{ $json.Nombre }}",
+            "Appointment type": "={{ $json.Servicio }}",
+            "Professional": "={{ $json.Profesional }}",
+            "Phone number": "={{ $json.Numero }}",
+            "Date": "={{ $json.FechaInicio }}",
+            "StartTime": "={{ $json.HoraInicio }}",
+            "EndTime": "={{ $json.HoraFin }}",
+            "Id": "={{ $json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Appointment type",
+              "displayName": "Appointment type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Professional",
+              "displayName": "Professional",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Phone number",
+              "displayName": "Phone number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "StartTime",
+              "displayName": "StartTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "EndTime",
+              "displayName": "EndTime",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Codigo",
+              "displayName": "Codigo",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "CalendarId",
+              "displayName": "CalendarId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        992,
+        3040
+      ],
+      "id": "6f5ee74b-b772-408b-aa66-70a58e7c7202",
+      "name": "Append row in sheet7",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bfUUqddkHkczSi4E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v22.0/968516479684593/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAAbv6Yk59GEBR0OjxZAJluqnkJ5ypjFSyfSkkdWhnowSjqYBJdz1tYvlWlwZBj9kE9WqFuzWZA7E5MH5TzRYz06JVbHq7b4ZBEu5mkDpjRPZCQkfNucyt5yZByZArucs6qRZATAGb32rdv0EZCSZAqZADjiuTOWqZAiAkPX8aFEIDxyTTP6XqpE75jrZBGMrDfgcgVZB8YNQZDZD"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"recipient_type\": \"individual\",\n  \"to\": \"{{ $json['Phone number'] }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"prod_notificacion_24h_antes\",\n    \"language\": {\n      \"code\": \"es\"\n    },\n    \"components\": [\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Name }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Date }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.StartTime }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json['Appointment type'] }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.Professional }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        2240,
+        2528
+      ],
+      "id": "ce228817-3705-4d61-9bc0-50bfa3cd9a61",
+      "name": "HTTP Request7",
+      "disabled": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "dc4225bc5a0499a191ab0f3f24e31440accc51c151445b35ab359e0a614d00f4@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Laura"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        2048
+      ],
+      "id": "27de8857-d65e-4d53-8c87-2cfa340b4c2c",
+      "name": "Laura",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "sandaloboston@gmail.com",
+          "mode": "list",
+          "cachedResultName": "sandaloboston@gmail.com"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        2240
+      ],
+      "id": "4ea9404b-bbc9-41ae-b5ee-3f917f0439c8",
+      "name": "Sandalo",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "b0b9e15144b7a2119ddfef331365af4a1745a2ebcf8becf5de14000e45e00c32@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Bryan"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        1856
+      ],
+      "id": "8169a53e-16a4-4991-97ff-12cfb9801e40",
+      "name": "Bryan",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "147d9066d95571f48a4fce1f5c8bfd15ec4561ccf9a424b7b2884fedac3986c8@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Astrid"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        1664
+      ],
+      "id": "c1bc104d-0558-4aaa-a91d-1c87964f49c7",
+      "name": "Astrid",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "fe45d020a80716deb015ce4f21a4d59190e246dc4272b85a92e447be2bf5e119@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Alejandro"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        1472
+      ],
+      "id": "bcb5f5d1-83c1-4f3e-86e6-e8454846a8ce",
+      "name": "Alejo",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "aa7d0ee6-f9c3-4c8c-bdb5-0300ded2e722",
+              "leftValue": "={{ $json.summary.toLowerCase() }}",
+              "rightValue": "={{ \"L26\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "e092f0b2-2dda-47ee-9f0f-c0aa1d2ba0e2",
+              "leftValue": "={{ $json.summary.toLowerCase() }}",
+              "rightValue": "={{ \"Local26\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -912,
+        2144
+      ],
+      "id": "c5eb3b1b-a9c3-4952-8399-1cf959b82fdd",
+      "name": "L26?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3c41c6d8-b898-4182-8cd5-b27be6dceb28",
+              "leftValue": "={{ $json.summary.split(\"-\")[2]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"VA\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -688,
+        2336
+      ],
+      "id": "ad0f1b31-43f5-4a76-bf62-1e8c98b5a4d4",
+      "name": "VA?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "0ecfa64a-7586-4708-a629-7937aaf93925",
+              "leftValue": "={{ $json.summary.split(\"-\")[2]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"GC\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -464,
+        2624
+      ],
+      "id": "ece7ac89-488d-4699-a6e9-9352fe31d0fb",
+      "name": "GC?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "637e1d89-e761-42ba-addc-e4e0e0637198",
+              "leftValue": "={{ $json.summary.split(\"-\")[2]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"PA\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        2912
+      ],
+      "id": "8d875cbb-b3a6-4224-82d6-b39bf10ba093",
+      "name": "PA?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b72921e4-d6cf-411b-ad3f-aa9275351c42",
+              "leftValue": "={{ $json.summary.split(\"-\")[2]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"DP\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -16,
+        3200
+      ],
+      "id": "c0ea39ba-a5bb-4987-bbfd-52b840813ced",
+      "name": "DP?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "024662d9-f19b-47b3-b861-7bd5a6c7a32d",
+              "leftValue": "={{ $json.summary.split(\"-\")[3]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"N/A\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "8db42530-9539-4c5f-bb0b-e459ae842b16",
+              "leftValue": "={{ $json.summary.split(\"-\")[3]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"MASAJE\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        896
+      ],
+      "id": "2b0b87d9-9ffb-492d-bea5-094d383ea038",
+      "name": "Servicio = N/A?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "024662d9-f19b-47b3-b861-7bd5a6c7a32d",
+              "leftValue": "={{ $json.summary.split(\"-\")[3]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"N/A\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "57f3c4b4-399d-4566-983a-55ee3c83ac69",
+              "leftValue": "={{ $json.summary.split(\"-\")[3]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"VALORACION\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -16,
+        1376
+      ],
+      "id": "59a2e80a-aa0c-48b1-8702-95b2ab136009",
+      "name": "Servicio = N/A o VA?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "51d12885-647d-4374-af78-10b886a3c79c",
+              "leftValue": "={{ $json.summary.split('-').length - 1 }}",
+              "rightValue": 5,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        1472
+      ],
+      "id": "62c877fc-84e6-4c37-904c-4042ae01a28b",
+      "name": "5 \"-\" ?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "024662d9-f19b-47b3-b861-7bd5a6c7a32d",
+              "leftValue": "={{ $json.summary.split(\"-\")[3]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"N/A\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "57f3c4b4-399d-4566-983a-55ee3c83ac69",
+              "leftValue": "={{ $json.summary.split(\"-\")[3]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"Giftcard\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -16,
+        1952
+      ],
+      "id": "1cd0fc53-c1f2-4ac5-a073-f5e12abd1042",
+      "name": "Servicio = N/A?2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "51d12885-647d-4374-af78-10b886a3c79c",
+              "leftValue": "={{ $json.summary.split('-').length - 1 }}",
+              "rightValue": 5,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        2048
+      ],
+      "id": "661440cf-b5f2-4993-953a-a3b625911513",
+      "name": "5 \"-\" ?1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "024662d9-f19b-47b3-b861-7bd5a6c7a32d",
+              "leftValue": "={{ $json.summary.split(\"-\")[3]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"N/A\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "57f3c4b4-399d-4566-983a-55ee3c83ac69",
+              "leftValue": "={{ $json.summary.split(\"-\")[3]?.trim().toLowerCase() }}",
+              "rightValue": "={{ \"Paquete\".trim().toLowerCase() }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -16,
+        2528
+      ],
+      "id": "77b29117-20b5-4dd3-a911-ce6c297edcf6",
+      "name": "Servicio = N/A?3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "51d12885-647d-4374-af78-10b886a3c79c",
+              "leftValue": "={{ $json.summary.split('-').length - 1 }}",
+              "rightValue": 5,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        2624
+      ],
+      "id": "851ec1f9-cb49-46fa-abc5-77d2a96015fe",
+      "name": "5 \"-\" ?2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "51d12885-647d-4374-af78-10b886a3c79c",
+              "leftValue": "={{ $json.summary.split('-').length - 1 }}",
+              "rightValue": 5,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        3008
+      ],
+      "id": "434622d0-47cf-4d18-9a90-1db9f0f6e3c3",
+      "name": "colocaron servicio?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "51d12885-647d-4374-af78-10b886a3c79c",
+              "leftValue": "={{ $json.summary.split('-').length - 1 }}",
+              "rightValue": 4,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        3392
+      ],
+      "id": "62ba0772-4533-4aaf-b5d3-ce0dce835ab1",
+      "name": "colocaron servicio?1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=Masaje",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        800
+      ],
+      "id": "43faf577-a7d9-48f5-af6f-36bcff91cd8f",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=Masaje",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        992
+      ],
+      "id": "3557c1c5-13b4-4f9a-9064-154eb385d673",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=Valoración",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        1184
+      ],
+      "id": "0dc63ced-136e-4d48-8af3-8e000dae3d54",
+      "name": "Edit Fields8"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=Valoración",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        1568
+      ],
+      "id": "b3cdfef4-11fa-41c7-8ad3-abb29ac7e09b",
+      "name": "valoracion = valoracion"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        1376
+      ],
+      "id": "5b1e0ecf-c118-456c-af68-59a91770b6bf",
+      "name": "Colocaron el servicio1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=Giftcard",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        1760
+      ],
+      "id": "d3ab109c-224c-4cab-bcb3-feda4032a033",
+      "name": "Edit Fields11"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        1952
+      ],
+      "id": "28186de9-de8c-409c-a26e-1db2b972c7bd",
+      "name": "Colocaron el servicio"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=Giftcard",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        2144
+      ],
+      "id": "f6ff8be6-391f-442f-beb5-6ebd9e6b15c2",
+      "name": "Giftcard = Giftcard"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=Paquete",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        2336
+      ],
+      "id": "fe7ffb1b-6f4d-47ee-a350-52cf839270ec",
+      "name": "Edit Fields13"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        2528
+      ],
+      "id": "58d21130-219b-472d-aebc-6432e3289466",
+      "name": "Colocaron el servicio2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=Paquete",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        2720
+      ],
+      "id": "7fb5236f-8c93-4d80-86be-61934d6950ea",
+      "name": "Paquete = Paquete"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[4] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        2912
+      ],
+      "id": "a842d3b6-1aa1-419c-abcf-cc15f5a03a92",
+      "name": "Pagaron deposito y colocaron serv1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=N/A",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        3104
+      ],
+      "id": "cc94ac6b-cfec-41c1-986d-d4fa22bd1a9e",
+      "name": "Pagaron dep no colocaron servicio1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[3] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "=COBRA 40",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        3296
+      ],
+      "id": "ea41aece-a577-4c73-b022-9ce62f4609fb",
+      "name": "NO pagaron deposito y colocaron serv"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "37cd6c17-8fae-4eef-8486-5e28fe59e589",
+              "name": "Nombre",
+              "value": "={{ $json.summary.split(\"-\")[1].trim().split(\" \").pop() }}",
+              "type": "string"
+            },
+            {
+              "id": "af8f139b-0084-4979-9a18-d1f72de90832",
+              "name": "Servicio",
+              "value": "=N/A",
+              "type": "string"
+            },
+            {
+              "id": "09de86b5-d340-4ccc-9b44-f951dd97d9da",
+              "name": "Numero",
+              "value": "={{ $json.summary.split(\"-\")[2] }}",
+              "type": "string"
+            },
+            {
+              "id": "1faba8bb-e4b4-4f80-a8f2-cc6413619863",
+              "name": "FechaInicio",
+              "value": "=  {{ $json.start.dateTime.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "7a74dc42-abc0-4c90-8dd9-db875bc9b008",
+              "name": "HoraInicio",
+              "value": "={{ $json.start.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "c963c3cf-3fac-4fb1-a655-06c589537622",
+              "name": "Profesional",
+              "value": "={{ $json.organizer.displayName }}",
+              "type": "string"
+            },
+            {
+              "id": "40b8b924-b363-4383-9a31-551a7604a562",
+              "name": "id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "dddc3a33-fd4d-4920-b5e3-bb399ca53624",
+              "name": "created",
+              "value": "={{ $json.created.toDateTime().format('MM/dd/yyyy') }}",
+              "type": "string"
+            },
+            {
+              "id": "b083b50c-6d6f-4bb3-9c45-48a65e0820c8",
+              "name": "HoraFin",
+              "value": "={{ $json.end.dateTime.toDateTime().setZone('America/New_York').format('hh:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "f48d84eb-6a5e-4fbb-90ad-2398a09ea43e",
+              "name": "Codigo",
+              "value": "=COBRA 40",
+              "type": "string"
+            },
+            {
+              "id": "961b1056-90d5-439e-b18e-64be12877383",
+              "name": "CalendarId",
+              "value": "={{ $json.organizer.email }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        432,
+        3488
+      ],
+      "id": "12aa07f2-79cf-4229-948a-a83376169b45",
+      "name": "NO pagaron dep NO colocaron servicio"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "b5dac6f7f5398a63938a5075ab7138ba23c4fdda21b7cd6590f00f6cfe16d24e@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "SÁNDALO SPA"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        2432
+      ],
+      "id": "377401b9-ece9-4fd8-8e7f-19d408c30b77",
+      "name": "SANDALOSPA",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "7a3eac3b18e5aa764ef470606404db8d85421d3cdc7a528648bff9430d421caf@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Maria Alejandra"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        1280
+      ],
+      "id": "46e98119-7779-4190-be87-80e050b527c2",
+      "name": "Maria Alejandra",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "74e0f443c5e2bf32de991da048ba09068ee664228826ef7941c16df5fb646f79@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Eimy Madrid "
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        2624
+      ],
+      "id": "e67958b5-b2eb-4952-981d-d383c095c4b2",
+      "name": "Eimy",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "3569c46e1fe52a46a3682c22cf159080528644dcbf6a04ed2539abadc1a0b983@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Mathias Mazo "
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        3008
+      ],
+      "id": "cc1feb27-4f63-4b7f-96e7-fc0271ae52e2",
+      "name": "Mathias",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "b5dac6f7f5398a63938a5075ab7138ba23c4fdda21b7cd6590f00f6cfe16d24e@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "EMILY"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        2816
+      ],
+      "id": "b16718c1-efb1-44b7-8b20-de9cc18fc996",
+      "name": "Emily",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "2dc9ce716f2413e4fd42d4a2c96244caa91eaa34a3c6cc240f35fcac7cfd9e79@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Valeria "
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        3200
+      ],
+      "id": "dbdb6b99-e1e3-400d-b350-e8e5f8349320",
+      "name": "Valeria",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "264e1c2ad4b158e87015ec3462fde820ba6975853d463f9ee7df58f37bb45166@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "Danny Perez"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.set({ hour: 8, minute: 0, second: 0 }).toISO() }}",
+        "timeMax": "={{ $now.plus({ days: 1 }).set({ hour: 20, minute: 0, second: 0 }).toISO() }}",
+        "options": {
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        1088
+      ],
+      "id": "cc1fc8e2-94eb-4ba2-9b2c-e69db00d6d40",
+      "name": "Danny Perez",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ef53ea5c-1184-4e61-a1c4-8b8029f4becc",
+              "leftValue": "={{ $json.Date }}",
+              "rightValue": "={{ $now.format('MM/dd/yyyy') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1360,
+        2512
+      ],
+      "id": "0576a124-82b6-4c92-b194-52fdc4eb1558",
+      "name": "If",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "operation": "clear",
+        "documentId": {
+          "__rl": true,
+          "value": "1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24h - Prod",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit#gid=0"
+        },
+        "keepFirstRow": true
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1584,
+        2144
+      ],
+      "id": "19dca0b7-fd73-4213-9c29-18f46976d588",
+      "name": "Clear sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bfUUqddkHkczSi4E",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "## Este IF\n\nHace que solo se envien notificaciones para las citas del dia siguiente",
+        "height": 640,
+        "width": 368,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1232,
+        2208
+      ],
+      "id": "2559c53f-6634-4df0-bb53-add3695c21c4",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Clear sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [
+          {
+            "node": "L26?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet6": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet7": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Laura": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sandalo": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bryan": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Astrid": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alejo": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "L26?": {
+      "main": [
+        [
+          {
+            "node": "Servicio = N/A?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "VA?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "VA?": {
+      "main": [
+        [
+          {
+            "node": "Servicio = N/A o VA?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GC?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GC?": {
+      "main": [
+        [
+          {
+            "node": "Servicio = N/A?2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PA?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "PA?": {
+      "main": [
+        [
+          {
+            "node": "Servicio = N/A?3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "DP?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DP?": {
+      "main": [
+        [
+          {
+            "node": "colocaron servicio?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "colocaron servicio?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Servicio = N/A?": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Servicio = N/A o VA?": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "5 \"-\" ?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 \"-\" ?": {
+      "main": [
+        [
+          {
+            "node": "Colocaron el servicio1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "valoracion = valoracion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Servicio = N/A?2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields11",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "5 \"-\" ?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 \"-\" ?1": {
+      "main": [
+        [
+          {
+            "node": "Colocaron el servicio",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Giftcard = Giftcard",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Servicio = N/A?3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields13",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "5 \"-\" ?2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 \"-\" ?2": {
+      "main": [
+        [
+          {
+            "node": "Colocaron el servicio2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Paquete = Paquete",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "colocaron servicio?": {
+      "main": [
+        [
+          {
+            "node": "Pagaron deposito y colocaron serv1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Pagaron dep no colocaron servicio1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "colocaron servicio?1": {
+      "main": [
+        [
+          {
+            "node": "NO pagaron deposito y colocaron serv",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "NO pagaron dep NO colocaron servicio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "valoracion = valoracion": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Colocaron el servicio1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields11": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Colocaron el servicio": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Giftcard = Giftcard": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields13": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Colocaron el servicio2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Paquete = Paquete": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pagaron deposito y colocaron serv1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Pagaron dep no colocaron servicio1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NO pagaron deposito y colocaron serv": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NO pagaron dep NO colocaron servicio": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SANDALOSPA": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Maria Alejandra": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eimy": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mathias": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Emily": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Valeria": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Danny Perez": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [],
+        [
+          {
+            "node": "HTTP Request7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clear sheet": {
+      "main": [
+        [
+          {
+            "node": "Alejo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Danny Perez",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Maria Alejandra",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Astrid",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bryan",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Laura",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Sandalo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "SANDALOSPA",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Eimy",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Emily",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Mathias",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Valeria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "a16b00e0-551b-442d-ae32-917758b419a9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2fcd2bbebfa243477c73eb44103e264531a434e82d48daeed5c042e60efb4ab5"
+  },
+  "nodeGroups": [],
+  "id": "VfrTJIXPv8uRJOxp",
+  "tags": []
+}

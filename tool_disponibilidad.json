@@ -1,0 +1,197 @@
+{
+  "name": "tool_disponibilidad",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "event_id",
+              "type": "any"
+            },
+            {
+              "name": "ProfetionalName",
+              "type": "any"
+            },
+            {
+              "name": "calendar_id",
+              "type": "any"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        1408,
+        0
+      ],
+      "id": "91849c88-bcd0-4ccf-bbfd-cd22fa715ac5",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "content": "## Horarios:\n\nLun-Vi\n8am - 9pm ultima cita 7:30\n"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2464,
+        384
+      ],
+      "id": "67a92c48-8eda-4342-96b4-84badb088595",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $json.calendar_id }}",
+          "mode": "id"
+        },
+        "eventId": "={{ $json.event_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1600,
+        0
+      ],
+      "id": "fc8cdcd7-6389-4d6e-ba28-13001fc983a7",
+      "name": "Get an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ $('When Executed by Another Workflow').item.json.calendar_id }}",
+          "mode": "id"
+        },
+        "returnAll": true,
+        "timeMin": "={{ $now.plus(1, 'day').startOf('day') }}",
+        "timeMax": "={{ $now.plus({ month: 1 }).endOf('day') }}",
+        "options": {
+          "orderBy": "startTime",
+          "timeZone": {
+            "__rl": true,
+            "value": "America/New_York",
+            "mode": "list",
+            "cachedResultName": "America/New_York"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1856,
+        0
+      ],
+      "id": "86acc2ab-01cb-4389-9303-53f0a756dc68",
+      "name": "Get many events",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "NFVZKmU9UvRBZ83Z",
+          "name": "Calendario Sandalo"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// --- CONFIGURACIÓN ---\nconst TIMEZONE = 'America/New_York';\nconst DEFAULT_MIN_SLOT_MINUTES = 90;\nconst DAYS_PER_WEEK_BLOCK = 7; // tamaño de cada bloque \"semana\" de opciones\n\n// Horas en decimal (ej. 19.5 = 7:30pm). lastStart = última hora de inicio permitida\n// (tope duro de \"última cita\", independiente de la duración del servicio).\nconst day = (start, end, lastStart) => ({ start, end, lastStart });\n\n// Horario por defecto del spa. Aplica a Alejandro, Bryan, Laura, María Alejandra,\n// y a CUALQUIER profesional no listado explícitamente en SPECIAL_SCHEDULES\n// (Valeria, Emily, Danny, y cualquiera que se agregue a futuro).\nconst STANDARD = {\n  1: day(8, 20, 18.5), 2: day(8, 20, 18.5), 3: day(8, 20, 18.5), 4: day(8, 20, 18.5), 5: day(8, 20, 18.5), // Lun-Vie 8am-8pm\n  6: day(8, 18, 16.5), 0: day(8, 18, 16.5), // Sáb-Dom 8am-6pm\n};\n\nconst EIMY_SCHEDULE = {\n  2: day(15.5, 21, 19.5), 4: day(15.5, 21, 19.5), // Martes y Jueves\n  3: day(17.5, 21, 19.5), 5: day(17.5, 21, 19.5), // Miércoles y Viernes\n  6: day(8, 18, 16.5), 0: day(8, 18, 16.5), 1: day(8, 21, 19.5), // Sáb, Dom, Lun\n};\n\nconst ASTRID_SCHEDULE = {\n  6: day(16.5, 18, 16.5), // Solo sábado\n};\n\nconst MATHIAS_SCHEDULE = {\n  0: day(15.5, 18, 16.5), 1: day(15.5, 21, 19.5), 2: day(15.5, 21, 19.5), 3: day(15.5, 21, 19.5),\n  4: day(15.5, 21, 19.5), 5: day(15.5, 21, 19.5), 6: day(15.5, 18, 16.5), // L-D\n};\n\n// Solo los profesionales con horario DISTINTO al default necesitan entrada acá.\n// Cualquier nombre que no matchee ninguna clave cae en STANDARD automáticamente.\nconst SPECIAL_SCHEDULES = {\n  eimy: EIMY_SCHEDULE,\n  astrid: ASTRID_SCHEDULE,\n  mathias: MATHIAS_SCHEDULE,\n};\n\n// =============================\n// RESOLVER HORARIO DEL PROFESIONAL\n// =============================\n\nconst profetionalNameRaw = $('When Executed by Another Workflow').item.json.ProfetionalName || '';\nconst profetionalNameLower = profetionalNameRaw.toLowerCase();\n\nconst specialKey = Object.keys(SPECIAL_SCHEDULES).find(key => profetionalNameLower.includes(key));\nconst SCHEDULE = specialKey ? SPECIAL_SCHEDULES[specialKey] : STANDARD;\nconst WORK_DAYS = Object.keys(SCHEDULE).map(Number);\n\n// =============================\n// OBTENER EVENTO A REPROGRAMAR\n// =============================\n\nconst eventToReschedule = $node[\"Get an event\"].json;\nconst eventIdToIgnore = eventToReschedule.id;\n\nconst getEventDurationMinutes = (event) => {\n  if (!event?.start?.dateTime || !event?.end?.dateTime) {\n    return DEFAULT_MIN_SLOT_MINUTES;\n  }\n  const start = new Date(event.start.dateTime);\n  const end = new Date(event.end.dateTime);\n  return Math.round((end - start) / 60000);\n};\n\nconst REQUIRED_SLOT_MINUTES = getEventDurationMinutes(eventToReschedule);\n\n// =============================\n// OBTENER Y PREPARAR EVENTOS\n// =============================\n\nconst allEvents = $input.all().map(item => item.json);\n\nlet eventsInput;\nif (eventToReschedule && eventToReschedule.summary !== \"Not available\") {\n  eventsInput = allEvents.filter(e => e.id !== eventIdToIgnore);\n} else {\n  eventsInput = allEvents;\n}\n\n// =============================\n// HELPERS\n// =============================\n\nconst nyFormatter = new Intl.DateTimeFormat('en-CA', {\n  timeZone: TIMEZONE,\n  year: 'numeric',\n  month: '2-digit',\n  day: '2-digit'\n});\n\nconst getMins = (date) => {\n  const parts = new Intl.DateTimeFormat('en-US', {\n    timeZone: TIMEZONE,\n    hour: 'numeric',\n    minute: 'numeric',\n    hour12: false\n  }).formatToParts(date);\n\n  let h = parseInt(parts.find(p => p.type === 'hour').value);\n  if (h === 24) h = 0;\n\n  const m = parseInt(parts.find(p => p.type === 'minute').value);\n  return (h * 60) + m;\n};\n\nconst minsToTime = (mins) => {\n  const h = Math.floor(mins / 60);\n  const m = mins % 60;\n  const ampm = h >= 12 ? 'PM' : 'AM';\n  const h12 = h % 12 || 12;\n  return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;\n};\n\nconst MONTHS_ES = [\n  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',\n  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'\n];\n\nconst DAYS_ES = [\n  'Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'\n];\n\n// dow = día de la semana (0=Dom ... 6=Sáb), ya calculado en el loop principal\nconst formatSpanishDate = (dateString, dow) => {\n  const [year, month, day] = dateString.split('-').map(Number);\n  return `${DAYS_ES[dow]} ${day} de ${MONTHS_ES[month - 1]}`;\n};\n\n// =============================\n// CALCULAR FECHA DE INICIO\n// =============================\n\nconst todayNYString = nyFormatter.format(new Date());\n\n// Fecha de la cita a reagendar (en timezone NY)\nlet eventDateNY = null;\nif (eventToReschedule?.start?.dateTime) {\n  eventDateNY = nyFormatter.format(new Date(eventToReschedule.start.dateTime));\n}\n\n// startDate = el día DESPUÉS de la cita a reagendar (o mañana si no hay fecha)\n// Esto evita que se ofrezca el mismo día de la cita como opción\nconst referenceDate = eventDateNY && eventDateNY > todayNYString ? eventDateNY : todayNYString;\nconst startDate = new Date(`${referenceDate}T00:00:00`);\nstartDate.setDate(startDate.getDate() + 1);\n\nconst endDate = new Date(startDate);\nendDate.setDate(startDate.getDate() + 30);\n\n// =============================\n// CALCULAR DISPONIBILIDAD (AGRUPADA POR SEMANA)\n// =============================\n// weeks[0] = bloque de los primeros 7 días desde startDate (semana 1)\n// weeks[1] = los siguientes 7 días (semana 2), etc.\n\nconst weeks = [];\nlet currentLoopDate = new Date(startDate);\nlet dayIndex = 0;\n\nwhile (currentLoopDate <= endDate) {\n  const loopDateNY = nyFormatter.format(currentLoopDate);\n  const dayOfWeek = new Date(loopDateNY + 'T00:00:00').getDay();\n\n  const weekIndex = Math.floor(dayIndex / DAYS_PER_WEEK_BLOCK);\n  if (!weeks[weekIndex]) weeks[weekIndex] = [];\n\n  if (WORK_DAYS.includes(dayOfWeek)) {\n    const currentDateString = loopDateNY;\n\n    const daySchedule = SCHEDULE[dayOfWeek];\n    const dayStartMins = daySchedule.start * 60;\n    // \"Última cita\" = tope duro de inicio. El cierre efectivo del día para ARMAR\n    // slots es el menor entre el cierre real y (última cita + duración de ESTA\n    // cita). Así, start+duración<=dayEndMins ya implica start<=última cita,\n    // sin agregar ningún campo nuevo a la validación existente.\n    const dayEndMins = Math.min(daySchedule.end * 60, daySchedule.lastStart * 60 + REQUIRED_SLOT_MINUTES);\n\n    const daysEvents = eventsInput.filter(e => {\n      if (!e.start || !e.start.dateTime) return false;\n      const evtDate = new Date(e.start.dateTime);\n      const evtDateNY = nyFormatter.format(evtDate);\n      return evtDateNY === currentDateString;\n    });\n\n    let slots = [{ start: dayStartMins, end: dayEndMins }];\n\n    daysEvents.forEach(evt => {\n      const evtStart = new Date(evt.start.dateTime);\n      const evtEnd = new Date(evt.end.dateTime);\n\n      const eStartMins = getMins(evtStart);\n      const eEndMins = getMins(evtEnd);\n\n      let newSlots = [];\n      slots.forEach(slot => {\n        if (eEndMins <= slot.start || eStartMins >= slot.end) {\n          newSlots.push(slot);\n        } else {\n          if (slot.start < eStartMins) newSlots.push({ start: slot.start, end: eStartMins });\n          if (slot.end > eEndMins) newSlots.push({ start: eEndMins, end: slot.end });\n        }\n      });\n      slots = newSlots;\n    });\n\n    const validSlots = slots\n      .filter(s => (s.end - s.start) >= REQUIRED_SLOT_MINUTES)\n      .sort((a, b) => a.start - b.start);\n\n    validSlots.forEach(slot => {\n      weeks[weekIndex].push(\n        // Formato: \"Sábado 22 de Agosto de 9:00 AM a 6:00 PM\"\n        `${formatSpanishDate(currentDateString, dayOfWeek)} de ${minsToTime(slot.start)} a ${minsToTime(slot.end)}`\n      );\n    });\n  }\n\n  currentLoopDate.setDate(currentLoopDate.getDate() + 1);\n  dayIndex++;\n}\n\n// =============================\n// FORMATO FINAL — UNA LISTA POR SEMANA\n// =============================\n// Cada item de salida es una semana distinta, numerada desde 1 dentro de esa semana.\n// Se omiten las semanas sin ningún hueco disponible.\n\nreturn weeks\n  .map((weekLines, i) => {\n    const formatted = weekLines\n      .map((line, index) => `${index + 1}. ${line}`)\n      .join('\\n');\n\n    return {\n      json: {\n        week: i + 1,\n        text: formatted\n      }\n    };\n  })\n  .filter(item => item.json.text.length > 0);"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2112,
+        0
+      ],
+      "id": "cbe60ed2-30d9-460e-b903-fbf77ae36492",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "content": "## Horarios:\n\nAlejandro / Bryan / Laura / Maria Alejandra:\nLun-Vi 8am-8pm (ultima cita 6:30pm)\nSab-Dom 8am-6pm (ultima cita 4:30pm)\n\nAstrid: Solo sabado 4:30pm-6pm\n\nEimy: Mar/Jue 3:30-9pm, Mier/Vie 5:30-9pm, Sab-Dom-Lun 8am-9pm\n\nMathias: L-D 3:30pm-9pm\n\nCualquier otro profesional (Valeria, Emily, Danny, etc.): horario default (igual a Alejandro/Bryan/Laura/MA)",
+        "height": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        2480,
+        -208
+      ],
+      "id": "adaf6bb4-0c9f-4787-8730-093d41c09939",
+      "name": "Sticky Note2"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "event_id": "5lh89dl7icn8k75vf35ff2uk9d",
+          "ProfetionalName": "Alejandro",
+          "calendar_id": "fe45d020a80716deb015ce4f21a4d59190e246dc4272b85a92e447be2bf5e119@group.calendar.google.com"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get an event": {
+      "main": [
+        [
+          {
+            "node": "Get many events",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "ae324355-673c-4c5b-877e-d4ffc50804bc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2fcd2bbebfa243477c73eb44103e264531a434e82d48daeed5c042e60efb4ab5"
+  },
+  "nodeGroups": [],
+  "id": "9LDv9YSMsBkEGTZG",
+  "tags": []
+}

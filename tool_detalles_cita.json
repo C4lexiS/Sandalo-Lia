@@ -1,0 +1,236 @@
+{
+  "name": "tool_detalles_cita",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "Telefono",
+              "type": "number"
+            }
+          ]
+        }
+      },
+      "id": "15f4ecd8-02dd-468b-9b0f-ba41da8a3231",
+      "typeVersion": 1.1,
+      "name": "When Executed by Another Workflow",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        -544,
+        160
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908",
+          "mode": "list",
+          "cachedResultName": "Citas prox 24h - Prod",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XErjotdJD8mbmaJUB1mv4PJUbxtuIucymRwEMjJZ908/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Hoja 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1cAbAL8FGkPJ1PGmnhisqX_5sNt1RjDQwP8waeks4tv4/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Phone number",
+              "lookupValue": "={{ $json.Telefono }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -160,
+        272
+      ],
+      "id": "dbfb127e-6228-4ac5-beb1-ec4ee80b1d7a",
+      "name": "Get row(s) in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bfUUqddkHkczSi4E",
+          "name": "Google Sheets account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "260c0d7e-d6a2-4182-92d0-75547113e1df",
+              "name": "event_id",
+              "value": "={{ $json.Id }}",
+              "type": "string"
+            },
+            {
+              "id": "5cd99bcc-b042-4e8c-97bc-01ca86687bfa",
+              "name": "row_number",
+              "value": "={{ $json.row_number }}",
+              "type": "number"
+            },
+            {
+              "id": "4377299e-231b-4678-ae1b-20af4c4df213",
+              "name": "Cliente",
+              "value": "={{ $json.Name }}",
+              "type": "string"
+            },
+            {
+              "id": "c9efdba3-a04b-43d0-bf65-fa0bcbf7ac34",
+              "name": "Telefono",
+              "value": "={{ $json['Phone number'] }}",
+              "type": "string"
+            },
+            {
+              "id": "25a8fc15-5ae5-4b01-bbaa-a6908b1d22c8",
+              "name": "Servicio",
+              "value": "={{ $json['Appointment type'] }}",
+              "type": "string"
+            },
+            {
+              "id": "19e41e1c-7142-4e96-a3d5-353c2a2ba5f8",
+              "name": "Profesional",
+              "value": "={{ $json.Professional }}",
+              "type": "string"
+            },
+            {
+              "id": "63d5f95e-00d1-48af-aa8d-5e3bff74bfd3",
+              "name": "start",
+              "value": "={{ $json.StartTime }}",
+              "type": "string"
+            },
+            {
+              "id": "8397bb55-cf6e-4b44-b39a-ee271c7eb245",
+              "name": "end",
+              "value": "={{ $json.EndTime }}",
+              "type": "string"
+            },
+            {
+              "id": "df6ad2bc-1628-4617-b3b1-875738622ee8",
+              "name": "startDate",
+              "value": "={{ $json.Date }}",
+              "type": "string"
+            },
+            {
+              "id": "846e238e-0555-45b9-b5f5-73aa3c913e63",
+              "name": "CalendarId",
+              "value": "={{ $json.CalendarId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        64,
+        272
+      ],
+      "id": "c80fbb32-c2c7-417b-ab85-0fedd7cf2ec7",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -592,
+        352
+      ],
+      "id": "5ab7c4d5-0367-4924-b04c-32eca13b2b9f",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "content": "Esta es la tool que usa el agente para buscar las citas agendadas por el numero de telefono)"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "1f2cfb92-0680-487c-aa86-3206593e9a85",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "Telefono": 573016497895
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "fdfd9f95-a6c1-4c84-a2b8-f4e2dad2a883",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2fcd2bbebfa243477c73eb44103e264531a434e82d48daeed5c042e60efb4ab5"
+  },
+  "nodeGroups": [],
+  "id": "8IrfTkjqQCYsNimQ",
+  "tags": [
+    {
+      "updatedAt": "2026-02-19T02:05:30.426Z",
+      "createdAt": "2026-02-19T02:05:30.426Z",
+      "id": "hD6vGHKhY90vUlWc",
+      "name": "Sandalo Spa - C"
+    }
+  ]
+}

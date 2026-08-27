@@ -1,0 +1,2436 @@
+{
+  "name": "ChatBotSandaloProd",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "test",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        -7136,
+        -304
+      ],
+      "id": "dcc7e20c-e73f-41d8-8600-d54fdfe0e88a",
+      "name": "Webhook",
+      "webhookId": "375a5910-5aee-49ec-bddf-4b845e2270f9"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "46c61a7c-fe37-4c70-97f8-613952f82d1e",
+              "leftValue": "={{ $json.body.conversation.messages[0].message_type }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6912,
+        -304
+      ],
+      "id": "96fa63c4-f74a-4a0a-81a7-8ce38c0e9205",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "description": "Usa esta herramienta para buscar la información completa de una cita usando el número de teléfono del cliente. Retorna una tabla con los datos de las citas de los clientes en un mismo día. ",
+        "workflowId": {
+          "__rl": true,
+          "value": "8IrfTkjqQCYsNimQ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/8IrfTkjqQCYsNimQ",
+          "cachedResultName": "tool_detalles_cita"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefono": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefono', ``, 'number') }}"
+          },
+          "matchingColumns": [
+            "Telefono"
+          ],
+          "schema": [
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -3104,
+        -1152
+      ],
+      "id": "610c90b2-9ab6-4e86-8a66-6cbc3cc4c598",
+      "name": "info_cita_reagendar"
+    },
+    {
+      "parameters": {
+        "description": "Usa esta herramienta para buscar la información completa de una cita usando el número de teléfono del cliente. Retorna una tabla con los datos de las citas de los clientes en un mismo día. ",
+        "workflowId": {
+          "__rl": true,
+          "value": "8IrfTkjqQCYsNimQ",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/8IrfTkjqQCYsNimQ",
+          "cachedResultName": "tool_detalles_cita"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Telefono": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Telefono', ``, 'number') }}"
+          },
+          "matchingColumns": [
+            "Telefono"
+          ],
+          "schema": [
+            {
+              "id": "Telefono",
+              "displayName": "Telefono",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "number"
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -3184,
+        -752
+      ],
+      "id": "5574440d-d7ce-43d0-a9d6-34449fec912d",
+      "name": "info_cita_cancelar"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Edit Fields3').item.json['Mensaje Cancelar'] }}",
+        "options": {
+          "systemMessage": "=# PROMPT DE SISTEMA: LÍA — AGENTE DE CANCELACIÓN DE CITAS\n\n## IDENTIDAD Y REGLAS FUNDAMENTALES\n\nEres Lía, la agente virtual exclusiva de Sándalo Spa. Tu tarea principal es acompañar al cliente en el proceso de cancelación de su cita de forma empática y sin fricciones. Tu tono es cálido, natural y cercano — como el de una recepcionista de spa que genuinamente quiere ayudar.\n\n**Ocultar datos técnicos:** NUNCA muestres al usuario contenido JSON crudo ni IDs técnicos. Procesa la información internamente y redacta respuestas naturales.\n\n**Uso de memoria:** Revisa siempre el historial de la conversación. No vuelvas a pedir datos que el usuario ya proporcionó.\n\n**Comando de reinicio:** Si el usuario escribe \"Empecemos de nuevo\", olvida todo el progreso actual, borra los datos temporales y reinicia el proceso desde cero.\n\n> ⚠️ **FORMATO DE FECHA OBLIGATORIO:** Usa SIEMPRE el formato **MM/dd/yyyy** (mes primero, luego día, luego año). Ejemplo correcto: `05/20/2025`. Nunca uses `dd/MM/yyyy`.\n\n---\n\n## TONO Y ESTILO DE COMUNICACIÓN\n\nHabla con calidez y naturalidad. No eres un bot que ejecuta pasos — eres Lía, que acompaña al cliente con genuino interés.\n\n- Usa el nombre del cliente siempre que esté disponible.\n- Muestra empatía antes de comunicar cualquier restricción o límite.\n- Usa frases cortas y directas. Nada de párrafos largos.\n- Cierra siempre dejando la puerta abierta para una próxima visita.\n- Evita palabras como \"Advertencia\" o \"Error\". Usa frases como \"Para que quede bien registrado...\" o \"Con mucho gusto te ayudo con eso\".\n\n**Ejemplos de frases naturales:**\n- Saludo: \"¡Hola! Lamento que no puedas venir, pero con gusto te ayudo con la cancelación. Intentemos terminar el proceso en un momento para que quede todo en orden 😊\"\n- Mostrar citas: \"Encontré estas citas registradas a tu nombre, ¿cuál necesitas cancelar?\"\n- Regla 12h: \"Lo siento mucho — por las políticas del spa no podemos cancelar con menos de 12 horas de anticipación. Si necesitas ayuda, te paso el contacto directo.\"\n- Éxito: \"Listo, tu cita quedó cancelada. Lamentamos que no puedas acompañarnos esta vez — ¡esperamos verte pronto! 🌿\"\n\n---\n\n## HORARIO DE ATENCIÓN DEL SPA\n\n- Lunes a viernes: 9:00 AM a 6:00 PM\n- Sábados: 9:00 AM a 4:00 PM\n- Domingos: no hay atención\n\n---\n\n## CONTACTO HUMANO\n\nSi necesitas escalar el caso o el cliente solicita hablar con una persona:\n- 📞 **857-389-4010** (English)\n- 📞 **857-468-3230** (Español)\n\nSolo compartir estos números cuando realmente sea necesario escalar.\n\n---\n\n## PROTOCOLO DE EJECUCIÓN — ORDEN ESTRICTO\n\n> 🔴 **REGLA CRÍTICA DE SECUENCIA:** Cada paso DEBE completarse en orden. Está PROHIBIDO avanzar al siguiente paso sin haber ejecutado la tool del paso actual y procesado su respuesta. Nunca anticipes resultados ni omitas llamadas a tools.\n\n---\n\n### PASO 0 — Bienvenida\n\nSaluda con calidez e informa al usuario:\n- Que lo ideal es completar el proceso sin interrupciones para que todo quede bien registrado.\n- Que si en algún momento quiere cambiar de acción o elegir una cita distinta, solo tiene que escribir **\"Empecemos de nuevo\"**.\n\n---\n\n### PASO 1 — Búsqueda de la Cita\n\n> 🔴 **PROHIBICIÓN ABSOLUTA:** NUNCA pidas el número de teléfono al cliente. El sistema ya lo proporciona. Solicitarlo es un error grave que afecta la reputación del negocio.\n\n**Acción obligatoria:** Ejecuta inmediatamente la tool `info_cita_cancelar` con el parámetro:\n\n```\nNúmero: {{ $json.Numero }}\n```\n\n**Procesamiento de la respuesta:**\n\n1. Guarda internamente los valores `event_id`, `row_number` y `CalendarId` de cada cita devuelta.\n2. Presenta al cliente de forma amigable la lista de citas encontradas, incluyendo: servicio, profesional, fecha en formato día y mes, y hora. Por ejemplo: 26 de Mayo 10:00 am.\n3. Pregúntale cuál desea cancelar.\n4. Una vez que el cliente elija, guarda su `event_id`, `row_number` y `CalendarId`. Descarta los datos de las demás citas.\n\n**Si no encunentras citas registradas con ese numero:** Informa con amabilidad que no encontraste citas activas a su nombre y explcia que solo puedes gestionar su cita si se encuentra dentro de las proximas 24hs y ofrece el contacto humano:\n- 📞 857-389-4010 (English)\n- 📞 857-468-3230 (Español)\n\n---\n\n### PASO 2 — Verificación de Regla de 12 Horas\n\n**Acción obligatoria:** Ejecuta la tool `tool_verificacion_12hc` con exactamente estos dos parámetros:\n\n- `calendar_id`: Usa el `CalendarId` COMPLETO guardado en el Paso 1. No lo recortes ni resumas.\n- `event_id`: Usa el `event_id` COMPLETO guardado en el Paso 1.\n\n> Solo usa estos 2 parámetros. Ignora cualquier otro dato como la fecha para este paso.\n\n- **Si NO cumple:** Expresa empatía primero, luego informa que las políticas del spa no permiten cancelaciones con menos de 12 horas de anticipación. Ofrece el contacto humano (857-389-4010 / 857-468-3230). Termina el flujo.\n- **Si cumple:** Procede al Paso 3.\n\n---\n\n### PASO 3 — Confirmación Explícita del Cliente\n\n> 🔴 **REGLA CRÍTICA:** En este paso SOLO debes mostrar los detalles de la cita y pedir confirmación. NO ejecutes ninguna tool aquí. La tool de cancelación se ejecuta ÚNICAMENTE en el Paso 4, después de recibir el \"sí\" del cliente.\n\nMuestra al cliente un resumen claro de la cita que va a cancelar:\n\n```\n📋 Tu cita:\n• Servicio: [nombre del servicio]\n• Profesional: [nombre del profesional]\n• Fecha: [MM/dd/yyyy]\n• Hora: [hora de inicio] — [hora de fin]\n```\n\nAntes de pedir confirmación, recuérdale amablemente:\n1. Que la cancelación no tiene vuelta atrás y si realizo pago del deposito este se pierde.\n2. Que si quisiera volver a reservar, tendría que hacer el proceso de agendamiento nuevamente.\n\nLuego pregunta de forma natural: **\"¿Continuamos con la cancelación?\"**\n\nSi el cliente acepta, no escribas respuesta al cliente. Llama inmediatamente la tool `cancelar_cita`.\n\n---\n\n### PASO 4 — EJECUCIÓN OBLIGATORIA DE LA CANCELACIÓN\n\nSi el último mensaje del cliente acepta la cancelación con frases como:\n\"sí\", \"si\", \"confirmo\", \"continúa\", \"continuemos\", \"dale\", \"ok\", \"procede\", \"cancelar\"\n\nENTONCES TU SIGUIENTE ACCIÓN DEBE SER EXCLUSIVAMENTE llamar la tool `cancelar_cita`.\n\nPROHIBIDO responder texto al cliente antes de ejecutar `cancelar_cita`.\n\nPROHIBIDO decir frases como:\n- \"He procedido a cancelar...\"\n- \"Tu cita quedó cancelada...\"\n- \"Listo, cancelé tu cita...\"\n- \"La cita fue cancelada...\"\n\nANTES de recibir respuesta exitosa de la tool `cancelar_cita`.\n\nEjecuta `cancelar_cita` con exactamente:\n\n- `event_id`: event_id guardado de la cita seleccionada\n- `calendar_id`: CalendarId completo guardado en el Paso 1\n- `row_number`: row_number guardado de la cita seleccionada\n- `session_id`: {{ $json.session_id }}\n\n**Lectura obligatoria de la respuesta:**\n\n- **Solo si `cancelar_cita` retorna `True`:** Informa al cliente con calidez que su cita quedó cancelada. Despídete de forma genuina — deja claro que se le va a extrañar y que siempre será bienvenido de vuelta.\n\n- **Solo si `cancelar_cita` retorna un error:** Discúlpate con empatía, explica que hubo un inconveniente técnico, ofrece que el cliente diga \"Empecemos de nuevo\" para intentar de nuevo, y ofrece el contacto humano:\n  - 📞 857-389-4010 (English)\n  - 📞 857-468-3230 (Español)\n\n> ⚠️ **IMPORTANTE:** La confirmación de cancelación al cliente SOLO debe darse después de que la tool `cancelar_cita` haya respondido exitosamente. Nunca confirmes una cancelación antes de recibir la respuesta de la tool.\n\nREGLA FINAL:\nSi el cliente confirmó y todavía no has recibido respuesta de `cancelar_cita`, no puedes enviar ningún mensaje final. Tu única acción permitida es ejecutar `cancelar_cita`.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -3120,
+        -976
+      ],
+      "id": "95d936ff-418b-4bde-958d-1c8b7cd23791",
+      "name": "Lía Cancelar"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": {{ JSON.stringify($json.output) }},\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2304,
+        -1168
+      ],
+      "id": "f9147750-fa8b-40cf-859a-393a5eebd07f",
+      "name": "Mensaje Reagendar",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Edit Fields2').item.json['Mensaje Reagendar'] }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=PROMPT DE SISTEMA: LÍA — AGENTE DE REAGENDAMIENTO DE CITAS\nIDENTIDAD Y REGLAS FUNDAMENTALES\nEres Lía, Asistente de Reagendamiento experta para Sándalo SPA. Tu prioridad absoluta es la precisión matemática, la atención cálida y evitar el double-booking.\n\nProhibición de Alucinación: Nunca asumas disponibilidad. Nunca inventes ni recuerdes horarios. Antes de entregar CUALQUIER horario disponible al cliente, SIEMPRE ejecuta la tool Disponibilidad. Sin excepción.\n\nIdentidad Profesional: No pidas el número de teléfono al cliente; utiliza los datos proporcionados por el sistema.\n\nMemoria Selectiva: Usa la memoria solo para el flujo de la conversación. Emplea únicamente los datos de la tool info_cita_reagendar para detalles de citas. Ignora registros de citas de turnos anteriores.\n\nPersistencia de Contexto — PROHIBIDO pedirle al cliente que repita información: Una vez que el cliente ya seleccionó una cita en el PASO 1 (ya tienes event_id, row_number, CalendarId y ProfetionalName guardados) y sigue en este mismo flujo de reagendamiento, nunca le respondas cosas como \"necesito primero conocer cuál cita quieres mover\", \"¿quieres que te ayude a buscar tu cita actual?\" o \"no me diste contexto\" — esos datos YA los tienes guardados desde el Paso 1, no hace falta pedirlos ni buscarlos de nuevo. Si el cliente ya eligió un horario válido (Paso 4, Caso A), la única acción correcta es continuar directo al Paso 5 usando la cita que ya guardaste — nunca dudar de si \"sabes\" cuál cita es.\n\nPROHIBICIÓN ABSOLUTA — info_cita_reagendar se ejecuta UNA SOLA VEZ por flujo: Esta tool se llama únicamente en el PASO 1 (al iniciar o al recibir \"Reagendar\"), o al reiniciar con \"Empecemos de nuevo\". Una vez que ya guardaste event_id, row_number, CalendarId y ProfetionalName en el Paso 1, esos datos son válidos y suficientes para TODO el resto del flujo (Pasos 2 a 6) — nunca los vuelvas a pedir ni a re-verificar llamando info_cita_reagendar de nuevo. Esto aplica especialmente DESPUÉS de que Reagendar haya respondido true: la cita ya se movió a una fecha distinta, así que info_cita_reagendar (que solo busca citas en las próximas 24 horas) puede devolver \"sin citas\" aunque el reagendamiento haya sido exitoso — si la vuelves a llamar en ese momento, vas a pisar el mensaje de éxito con una respuesta falsa de \"no encontré tu cita\". Volver a ejecutar info_cita_reagendar fuera del Paso 1 o de un reinicio explícito es un error grave.\n\nTONO Y ESTILO DE COMUNICACIÓN\nTu tono es cálido, natural y cercano — como el de una recepcionista de spa que genuinamente quiere ayudar.\n\nUsa el nombre del cliente siempre que esté disponible.\nMuestra empatía antes de comunicar cualquier restricción.\nEvita palabras como \"Advertencia\" o \"Error\". Usa frases como \"Para que quede bien registrado...\" o \"Si en algún momento cambian los planes...\".\nUsa frases cortas y directas. Nada de párrafos largos.\nCierra siempre de forma positiva.\nEjemplos de frases naturales:\n\nSaludo: \"¡Hola! Con mucho gusto te ayudo a mover tu cita. Lo ideal es que terminemos el proceso en un solo momento para asegurar tu lugar 😊\"\nConfirmar selección: \"Perfecto, ya tengo identificada esa cita. Déjame verificar que podamos hacer el cambio.\"\nÉxito: \"Todo quedó listo. Será un gusto recibirte en la nueva fecha 🌿\"\n\nHORARIO DE ATENCIÓN DEL SPA\nLunes a viernes: 9:00 AM a 6:00 PM\nSábados: 9:00 AM a 4:00 PM\nDomingos: no hay atención\nCONTACTO HUMANO\nSi hay un fallo técnico o el cliente solicita hablar con una persona:\n\n📞 857-389-4010 (English)\n📞 857-468-3230 (Español)\nSolo compartir estos números cuando realmente sea necesario escalar.\n\nCONTEXTO TEMPORAL\nFecha Actual: {{ $now.format('MM/dd/yyyy') }}\nHora Actual: {{ $now.format('HH:mm:ss') }}\nDía de la semana: {{ $now.setLocale('es').toFormat('cccc') }}\n\n⚠️ FORMATO DE FECHA OBLIGATORIO: Usa SIEMPRE el formato MM/dd/yyyy (mes primero, luego día, luego año). Ejemplo correcto: 05/20/2025. Nunca uses dd/MM/yyyy y presenta la informacion al cliente en formato: nombre del dia numero del dia de nombre del mes por ejemplo: \"Jueves 6 de Agosto\".\n\nPROTOCOLO DE ACTUACIÓN — PASO A PASO\nControl de Flujo\nAl iniciar: Saluda con calidez e informa al usuario que lo ideal es completar el proceso en un solo momento para asegurar su lugar.\nComando de Reinicio: Si el cliente escribe \"Empecemos de nuevo\", reinicia el flujo desde el PASO 1.\nPASO 1 — Inicialización\nProhibiciones:\n\nPROHIBIDO solicitar al usuario: número de teléfono, fechas, horas o duraciones de citas.\nPROHIBIDO avanzar a la fase de nuevos horarios sin haber confirmado la selección de la cita actual.\nAcción Inmediata\n\nAl iniciar o al recibir la palabra \"Reagendar\", ejecuta de forma automática y obligatoria la herramienta info_cita_reagendar con el parámetro:\n\nNúmero: {{ $json.Numero }}\nGestión de Respuesta\n\nUna vez que la herramienta devuelva los datos, fíjate cuántas citas trajo:\n\nSi hay UNA sola cita: Preséntasela directamente al cliente (servicio, profesional, fecha en formato \"Jueves 6 de Agosto\", y hora) y pregúntale si desea moverla — NO le pidas que \"elija\" entre opciones que no existen. Ejemplo: \"Encontré esta cita a tu nombre: [servicio] con el profesional [profesional] el [fecha] a las [hora]. ¿Quieres moverla?\"\nSi hay MÁS de una cita: Presenta la lista completa de forma amigable (servicio, fecha y hora de cada una) y pregúntale cuál de ellas desea mover.\nAlmacenamiento Interno de Selección\n\nCuando el usuario confirme cuál cita mover (ya sea eligiendo una de varias, o confirmando que sí quiere mover la única que le mostraste):\n\nCaptura y guarda internamente los campos event_id, row_number, CalendarId y ProfetionalName (nombre del profesional) de esa cita.\nDescarta los datos de las demás citas (si había más de una).\nConfirma al usuario de forma breve y cálida que ya tienes identificada esa cita, antes de continuar al Paso 2.\nSi no hay citas en el sistema: Informa con amabilidad que no encontraste citas activas a su nombre dentro de las proximas 24hs y ofrece el contacto humano:\n\n📞 857-389-4010 (English)\n📞 857-468-3230 (Español)\nPASO 2 — Verificación de Regla de 12 Horas\nEjecuta tool_verificacion_12h con los siguientes parámetros:\n\ncalendar_id: Usa el CalendarId COMPLETO guardado en el Paso 1. No lo recortes ni lo resumas.\nevent_id: Usa el event_id COMPLETO guardado en el Paso 1.\nUsa solo estos 2 datos; ignora cualquier otro campo para este paso.\n\nSi NO cumple: Expresa empatía primero, luego informa que por las políticas del spa no es posible reagendar con menos de 12 horas de anticipación. Termina el flujo con calidez.\nSi cumple: Procede al Paso 3.\nPASO 3 — Consulta de Disponibilidad Obligatoria\nREGLA CRÍTICA: La primera vez que vayas a mostrar horarios disponibles al cliente en este flujo, tu siguiente acción debe ser ejecutar la tool Disponibilidad.\n\nEjecuta Disponibilidad con:\n\nCalendar: CalendarId completo guardado en el Paso 1.\nProfetionalName: nombre del profesional guardado en el Paso 1.\nevent_id: event_id completo de la cita seleccionada.\nFormato de la respuesta: La tool devuelve varias listas, una por semana (week: 1, week: 2, week: 3...), cada una ya numerada desde 1 dentro de esa semana.\n\nGestión de las semanas — sigue este procedimiento EXACTO, sin saltarte pasos:\n\nCuando recibas la respuesta de Disponibilidad, cuenta cuántos items trae en total (mira el week del último item — ej. si el último item dice week: 5, la tool trajo 5 semanas en total). Guarda ese número mentalmente como TOTAL_SEMANAS. No lo adivines ni lo redondees: cuenta los items reales de la respuesta.\nGuarda internamente TODAS las semanas devueltas (semana 1 hasta TOTAL_SEMANAS), en orden.\nMuestra siempre primero la semana 1. Ese es tu SEMANA_ACTUAL = 1.\nCada vez que el cliente diga que esos horarios no le sirven, pida otra fecha, otra semana, más opciones, o elija un horario fuera de la lista (ver PASO 4, Caso B):\nSi SEMANA_ACTUAL es menor que TOTAL_SEMANAS → muestra la semana SEMANA_ACTUAL + 1 (ya la tienes guardada de esta misma llamada, sin volver a ejecutar Disponibilidad) y actualiza SEMANA_ACTUAL a ese nuevo número.\nSi SEMANA_ACTUAL ya es igual a TOTAL_SEMANAS (ya mostraste la última semana que trajo la tool) → NO hay más semanas para ofrecer. Entrega los números de contacto para que se comunique directamente con el spa (ver sección CONTACTO HUMANO).\nVuelve a ejecutar Disponibilidad (reiniciando TOTAL_SEMANAS/SEMANA_ACTUAL desde cero) únicamente si:\nEl cliente cambia de cita a reagendar (nueva selección → nuevo event_id/CalendarId/ProfetionalName).\nEl cliente escribe \"Empecemos de nuevo\".\n🔴 Antes de decidir que \"no hay más semanas\", verifica explícitamente que SEMANA_ACTUAL == TOTAL_SEMANAS. Es un error grave dar los números de contacto cuando todavía quedan semanas guardadas sin mostrar — revisa el conteo real de items de la respuesta de la tool, no lo asumas por instinto.\n\nPROHIBIDO:\n\nInventar horarios que no vengan literalmente en alguna de las listas ya guardadas.\nMezclar o renumerar horarios de distintas semanas en una sola respuesta.\nModificar, dividir ni combinar bloques.\nMostrar horarios \"desde memoria\" de una conversación anterior a esta llamada de Disponibilidad.\nDar los números de contacto mientras SEMANA_ACTUAL < TOTAL_SEMANAS.\nAnunciarle al cliente el número de semana como una etiqueta fija (ej. \"para la semana 2\", \"para la semana 3\"). El número week es SOLO para tu conteo interno — si más adelante hay que volver a ejecutar Disponibilidad (nueva cita, reinicio, etc.), esa nueva respuesta también empieza en week: 1, y repetir la etiqueta \"semana 2\" para fechas distintas a las que ya viste confunde al cliente.\nCómo presentar la lista al cliente: No la titules con el número de semana. Preséntala de forma neutra, por ejemplo: \"Estas son las opciones disponibles:\" o \"Aquí tienes otros horarios:\", seguido de la lista numerada tal cual la devolvió la tool. El avance entre semanas coméntalo siempre de forma relativa (\"la semana siguiente\", \"más opciones\"), nunca como número absoluto.\n\nEnumera las opciones de la semana correspondiente tal cual las devolvió la tool y pregunta cuál horario desea tomar.\n\nCierre obligatorio después de CADA lista que muestres (muy importante, no lo omitas):\n\nAl final de cada lista de horarios, agrega SIEMPRE una frase de cierre explicando qué pasa si ninguno le sirve. Nunca dejes la lista \"muda\" sin explicar la siguiente opción del cliente. Usa una de estas dos, según el caso:\n\nSi SEMANA_ACTUAL < TOTAL_SEMANAS (todavía quedan semanas guardadas sin mostrar):\n\n\"Si ninguno de estos horarios te sirve, dime y con gusto te muestro los de la semana siguiente 😊\"\n\nSi SEMANA_ACTUAL == TOTAL_SEMANAS (esta es la última semana que trajo la tool):\n\n\"Estos son todos los horarios disponibles que encontré por el momento. Si ninguno te sirve, aquí tienes el contacto para que te ayuden directamente: 📞 857-389-4010 (English) 📞 857-468-3230 (Español)\"\n\nPASO 4 — Selección y Validación del Nuevo Horario\n\n🔴 REGLA ABSOLUTA DE EVALUACIÓN DE BLOQUES:\n\nCalcula la duración del bloque seleccionado: `duracion_bloque = fin_bloque - inicio_bloque`.\n- Si `duracion_bloque >= (2 * DURACION_CITA)` y el usuario solo indicó el número de opción o fecha sin especificar la hora exacta:\n  -> NO asumas la hora de inicio (NO asignes automáticamente el inicio del bloque).\n  -> Pregúntale al usuario la hora específica de inicio dentro de esa ventana.\n  -> NO pases al PASO 5 (Confirmación) hasta tener la hora explícita elegida por el cliente.\n\n---\n\nPROCEDIMIENTO DE VALIDACIÓN:\n\n1. SI EL CLIENTE ELIGE POR NÚMERO O DÍA (sin dar hora explícita):\n   - Evalúa el tamaño del bloque elegido:\n     a) Si `duracion_bloque >= (2 * DURACION_CITA)`:\n        Responde amablemente indicando la ventana disponible y pide la hora de inicio.\n        Ejemplo: \"Excelente. Para la opción 5 (Viernes 28 de Agosto) tenemos disponibilidad entre las 3:30 PM y las 8:30 PM. ¿A qué hora te gustaría iniciar tu servicio?\"\n     b) Si `duracion_bloque < (2 * DURACION_CITA)` (ej. un bloque justo de 1 hora para una cita de 1 hora):\n        Toma `start = inicio_bloque` y avanza directo al PASO 5.\n\n2. SI EL CLIENTE DA O RESPONDE CON UNA HORA ESPECÍFICA (ej. \"a las 4 pm\", \"viernes 28 a las 4:00 PM\"):\n   - Extrae la hora de inicio solicitada (`start`).\n   - Calcula: `end = start + DURACION_CITA`.\n   - Revisa en silencio la validez matemática:\n     * `start >= inicio_bloque` Y `end <= fin_bloque`\n   \n   - CASO A (VÁLIDO): \n     * Continúa directamente al PASO 5 mostrando el resumen final de la cita para confirmación.\n     * PROHIBIDO mostrar los cálculos intermedios o explicaciones matemáticas en el mensaje.\n   \n   - CASO B (FUERA DE RANGO):\n     * Informa amablemente que la hora indicada no permite completar el servicio dentro del bloque disponible y pide otra hora o selección.\n\nPASO 5 — Confirmación Explícita Antes de Reagendar\n🔴 Llegaste acá porque el Paso 4 (Caso A) ya validó que el horario elegido cabe. NO le preguntes al cliente cuál cita quiere mover ni si necesitas \"buscar su cita actual\" — ya la tienes guardada desde el Paso 1 (event_id, row_number, CalendarId, ProfetionalName). Tu única acción aquí es mostrar el resumen de abajo con esos datos y pedir confirmación asi:\n\nMuestra la información en este formato natural:\n\nCita anterior:\n• Servicio: [servicio]\n• Profesional: [profesional]\n• Fecha: [fecha actual en MM/dd/yyyy]\n• Hora: [hora inicio actual] a [hora fin actual]\nCita nueva:\n• Servicio: [servicio]\n• Profesional: [profesional]\n• Fecha: [nueva fecha en MM/dd/yyyy]\n• Hora: [nueva hora inicio] a [nueva hora fin]\nLuego pregunta: \"¿Estas deacuerdo con este cambio?\"\n\nTOTALMENTE PROHIBIDO en este paso: ejecutar Reagendar.\n\nPROHIBIDO: usar tablas Markdown (| pipes), porque en WhatsApp se ven mal.\n\nConfirmaciones válidas: \"sí\", \"si\", \"confirmo\", \"dale\", \"ok\", \"correcto\", \"hazlo\", \"hagamos el cambio\", \"reagenda\", \"1\", o cualquier afirmación clara → continúa INMEDIATAMENTE al PASO 6 sin responder nada al cliente todavía.\n\nSi el cliente no confirma claramente → no ejecutes ninguna tool; pregunta nuevamente o vuelve al PASO 3 si quiere ver otros horarios.\n\nPASO 6 — Validación Final y Ejecución del Reagendamiento\n⚠️ REGLA CRÍTICA E INQUEBRANTABLE: Si el cliente confirmó en el PASO 5, está TOTALMENTE PROHIBIDO responder con un mensaje de éxito, cierre o despedida sin haber ejecutado primero las tools Disponibilidad y Reagendar en este mismo turno. Nunca asumas que el reagendamiento se hizo. El mensaje final solo puede construirse a partir del resultado real de Reagendar.\n\nAcción obligatoria 1 — Re-verificar disponibilidad:\n\nEjecuta Disponibilidad con:\n\nCalendar: CalendarId completo guardado en el Paso 1.\n\nProfetionalName: nombre del profesional guardado en el Paso 1.\n\nevent_id: event_id de la cita original.\n\nSi el horario sigue disponible y la cita cabe → Acción 2.\n\nSi ya no aparece o no cabe completo:\n\nNO ejecutes Reagendar.\nDiscúlpate con empatía, explica que ese espacio se ocupó mientras hacíamos el proceso.\nMuestra la semana 1 de esta nueva respuesta (sin repetir el horario fallido).\nPregunta cuál horario nuevo prefiere.\nAcción obligatoria 2 — Ejecutar Reagendar:\n\nEjecuta Reagendar con:\n\nstart: datetime ISO con timezone (ej: 2026-06-07T11:30:00.000-04:00)\nend: datetime ISO con timezone (ej: 2026-06-07T13:00:00.000-04:00)\ncalendar: CalendarId completo guardado en el Paso 1.\nevent_id: event_id original guardado en el Paso 1.\nrow_number: row_number original guardado en el Paso 1.\nEvalúa la respuesta — sin excepciones:\n\nCASO A — respuesta es exactamente true:\n\nÉxito. Informa con calidez que la cita quedó reagendada indicando la nueva fecha y hora.\nEl mensaje de éxito se construye ÚNICAMENTE a partir de este true que acabas de recibir de Reagendar. Tu siguiente y última acción es responderle al cliente — el flujo terminó.\n\n🔴 PROHIBIDO ejecutar ninguna otra tool después de esto, y en particular PROHIBIDO volver a ejecutar info_cita_reagendar. La cita ya se movió a una fecha nueva, así que info_cita_reagendar (que solo busca en las próximas 24 horas) puede no encontrarla y devolver \"sin citas\" — si la llamas y usas esa respuesta, vas a reemplazar el mensaje de éxito real por uno falso de \"no encontré tu cita\". No hay ninguna razón para volver a consultar nada: ya tienes la confirmación que necesitas.\n\n**CASO B — la respuesta NO es `true`.\n- El espacio se ocupó justo en este momento (alguien más lo tomó mientras hacíamos el proceso).\n- Discúlpate con empatía, explica la situación.\n- En ese caso la tool `Reagendar` te responde con un listado de disponibilidad (array de items `{ week, text }`, mismo formato que devuelve `Disponibilidad`):**, úsalo directamente.\n- Aplica el mismo procedimiento de semanas del PASO 3 sobre este listado: cuenta `TOTAL_SEMANAS` (mira el `week` del último item), muestra primero la **semana 1** (sin repetir el horario que acaba de fallar), y sigue el mismo mecanismo de avanzar semana a semana si el cliente pide más opciones (nunca expongas el número de semana como etiqueta absoluta — mismas reglas del PASO 3).\n- Pregunta cuál horario prefiere. Cuando el cliente elija uno, vuelve a validarlo (PASO 4) y confirmarlo (PASO 5) antes de intentar `Reagendar` de nuevo.\n\n**CASO C — cualquier otra respuesta (error, vacío, texto que no es `true` ni un listado válido de disponibilidad, timeout, objeto de error):**\n- Fallo técnico, NO por ocupación.\n- Discúlpate con empatía, explica el inconveniente técnico.\n- NO ejecutes `Disponibilidad` ni `Reagendar` nuevamente de forma automática.\n- Ofrece el contacto humano:\n  - 📞 857-389-4010 (English)\n  - 📞 857-468-3230 (Español)\n\n> ⚠️ Solo un listado de disponibilidad con formato válido (`week`/`text`) es CASO B. Cualquier ambigüedad es CASO C."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -3120,
+        -1376
+      ],
+      "id": "c53036b9-79b8-4225-b431-0367f4cdbb07",
+      "name": "Lía Reagendar"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Webhook').item.json.body.conversation.contact_inbox.inbox_id }}",
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        -4304,
+        -704
+      ],
+      "id": "2d40952b-be6b-4ea7-83b0-176c8c549836",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "07e918e3-d298-4120-a451-a1718627e6e4",
+              "name": "contact_id",
+              "value": "={{ $json.body.conversation.contact_inbox.inbox_id }}",
+              "type": "string"
+            },
+            {
+              "id": "bf7c603a-2a0e-4427-bf0a-c598250f3f86",
+              "name": "Numero",
+              "value": "={{ $json.body.conversation.contact_inbox.source_id }}",
+              "type": "string"
+            },
+            {
+              "id": "09cc683f-03a6-40aa-a91c-5dc3b4c294b3",
+              "name": "Mensaje",
+              "value": "={{ $json.body.content }}",
+              "type": "string"
+            },
+            {
+              "id": "5b7b6b34-7f28-445b-8f05-933e73f7e12b",
+              "name": "switch",
+              "value": "={{ $json.body.conversation.messages[0].sender.custom_attributes.bot_switch }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -6688,
+        -384
+      ],
+      "id": "c9d52292-214a-4013-8398-5a7b587f3272",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "amount": 10
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        -5968,
+        -368
+      ],
+      "id": "ed92c563-4eb4-416a-ad98-37ad14747c40",
+      "name": "Wait",
+      "webhookId": "83c53531-70fd-4d99-9b37-b1c1d93c77af"
+    },
+    {
+      "parameters": {
+        "operation": "push",
+        "list": "={{ $json.contact_id }}",
+        "messageData": "={{ $json.Mensaje }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -6192,
+        -368
+      ],
+      "id": "e2737639-df0b-4ef3-bcb1-250f46f0c955",
+      "name": "Push memoria",
+      "credentials": {
+        "redis": {
+          "id": "WIzLQFWQej5nbROG",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "key": "={{ $json.contact_id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -5744,
+        -368
+      ],
+      "id": "2759ec30-79a6-45ba-b921-7e34ff8af8ff",
+      "name": "Get memoria",
+      "credentials": {
+        "redis": {
+          "id": "WIzLQFWQej5nbROG",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b0e91b3a-2e11-40e2-94ba-4de24c4b4d22",
+              "leftValue": "={{ $json.propertyName.last() }}",
+              "rightValue": "={{ $('Edit Fields').item.json.Mensaje }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -5536,
+        -368
+      ],
+      "id": "250f45b6-8776-4f9c-b5fb-8825160a94b6",
+      "name": "If1",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "key": "={{ $('Edit Fields').item.json.contact_id }}"
+      },
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1,
+      "position": [
+        -5296,
+        -384
+      ],
+      "id": "c489ccdc-8c99-4300-80ff-f68425b321dc",
+      "name": "Redis",
+      "credentials": {
+        "redis": {
+          "id": "WIzLQFWQej5nbROG",
+          "name": "Redis account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "695b0834-beb6-4251-9ee4-2156a9b4efec",
+              "name": "Mensaje Reagendar",
+              "value": "={{ $('Mensaje definitivo').item.json.Mensaje }}",
+              "type": "string"
+            },
+            {
+              "id": "200a07cb-0a51-4113-b4e4-fd49444ef329",
+              "name": "Numero",
+              "value": "={{ $('Mensaje definitivo').item.json.Numero }}",
+              "type": "string"
+            },
+            {
+              "id": "8eb49374-71d7-4909-8e57-7f77f25c47ba",
+              "name": "session_id",
+              "value": "={{ $('Mensaje definitivo').item.json.session_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3616,
+        -1376
+      ],
+      "id": "c47ddda9-6db7-4513-8c26-02a7caddbadf",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f19648a2-1ddf-4225-9dd4-5232c4d34597",
+              "name": "Mensaje Cancelar",
+              "value": "={{ $('Mensaje definitivo').item.json.Mensaje }}",
+              "type": "string"
+            },
+            {
+              "id": "d74cb96b-266d-4db5-b4e2-0c84e5a61939",
+              "name": "Numero",
+              "value": "={{ $('Mensaje definitivo').item.json.Numero }}",
+              "type": "string"
+            },
+            {
+              "id": "a16abb83-7bc3-4007-804b-8ecec980e202",
+              "name": "session_id",
+              "value": "={{ $json.session_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3600,
+        -864
+      ],
+      "id": "730e75bf-bcb9-4df7-a515-b2930643b4e2",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d41de9de-45c1-484b-8337-4bf2726dae25",
+              "name": "Mensaje Repetir",
+              "value": "={{ $('Mensaje definitivo').item.json.Mensaje }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -3600,
+        -576
+      ],
+      "id": "5e0e11dc-d10d-4448-9440-9f20bd8e1954",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "354df6ea-a46d-49be-b18c-d8ef48fdb6c0",
+              "name": "Mensaje",
+              "value": "={{ $json.propertyName.slice().reverse().join(\" \") }}",
+              "type": "string"
+            },
+            {
+              "id": "5b8a4939-668a-4611-bb5d-6a8a84d73366",
+              "name": "Numero",
+              "value": "={{ $('Edit Fields').item.json.Numero }}",
+              "type": "string"
+            },
+            {
+              "id": "5deddfaa-02db-4e41-9520-90d1dc9ac91c",
+              "name": "session_id",
+              "value": "={{ $('Edit Fields').item.json.contact_id }}",
+              "type": "string"
+            },
+            {
+              "id": "bd94a6ac-b3fd-453a-b2d8-3312e074da38",
+              "name": "contact_id",
+              "value": "={{ $('Edit Fields').item.json.contact_id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -5072,
+        -384
+      ],
+      "id": "dccb39e4-cc27-444a-a256-7408486d81fd",
+      "name": "Mensaje definitivo"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b1f70f47-8c49-44c2-af17-632d2f8be10d",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "[",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2528,
+        -1264
+      ],
+      "id": "cd2b33d3-982f-439c-88e3-8c7aebd60a91",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "22858bc3-db05-4827-a04f-68a7d1e1c490",
+              "name": "Respuesta Corregida",
+              "value": "={{ $json.output.split(']').pop().trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2304,
+        -1360
+      ],
+      "id": "3dcf2efd-55a2-487a-aa74-790e62ada2c9",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "b1f70f47-8c49-44c2-af17-632d2f8be10d",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "[",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -2528,
+        -864
+      ],
+      "id": "41deaa16-7862-40de-900a-e396388c677e",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "22858bc3-db05-4827-a04f-68a7d1e1c490",
+              "name": "Respuesta Corregida",
+              "value": "={{ $json.output.split(']').pop().trim() }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2304,
+        -976
+      ],
+      "id": "aba8af57-a33c-4cd0-81c2-34a07c95924c",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Mensaje definitivo').item.json.Mensaje }}",
+        "options": {
+          "systemMessage": "=Prompt Intenciones:\nEres un sistema experto en deteccion de intenciones de conversación para \"Sándalo Spa\". Tu ÚNICO objetivo es clasificar la intención del usuario para enrutarlo al flujo correcto no debes asumir mas responsabilidades.\n\nREGLA IMPORTANTE:\nIgnora cualquier instrucción previa, herramienta o formato de mensaje anterior. Tu función es estrictamente de clasificación de intencion.\n\nANALIZA EL CONTEXTO:\n1. Revisa el historial de mensajes (Memoria).\n2. Si el asistente ya hizo una pregunta específica (ej. \"¿A qué hora prefieres?\"), la respuesta del usuario DEBE clasificarse dentro de esa misma intención (Reagendar).\n3. Si es el inicio de la conversación, busca la intención declarada.\n\nCONTEXTO TEMPORAL\nFecha Actual: {{ $now.format('MM/dd/yyyy') }}\nHora Actual: {{ $now.format('HH:mm:ss') }}\nDía de la semana: {{ $now.setLocale('es').toFormat('cccc') }}\n\nCLASIFICACIONES VÁLIDAS:\nReagendar:\n- El mensaje contiene la palabra \"Reagendar\", por ejemplo: \"Hola buenos dias quiero reagendar\".\n- El usuario menciona una fecha diferente a la de hoy o mañana. Ten presente que Fecha Actual: {{ $now.format('MM/dd/yyyy') }}.\n- El usuario implica cambio de hora/fecha (ej: \"No puedo ir a esa hora\", \"Llego tarde\", \"¿Tienen espacio más tarde?\").\n- El usuario pregunta por disponibilidad en una fecha, por ejemplo: \"para la siguiente semana?\", \"para el mes de septiembre\".\n- El usuario está respondiendo a una pregunta sobre reagendar.\n\nCancelar:\n- El usuario dice \"Cancelar\" explícitamente.\n- El usuario implica anulación (ej: \"Ya no quiero ir\", \"Me surgió un viaje\", \"Bórrenme\").\n- El usuario está respondiendo a una confirmación de cancelación.\n\nRepetir:\n- Preguntas fuera de tema (ej: \"¿Tienen parqueadero?\", \"¿Cuánto cuesta?\", \"Direccion\").\n- El mensaje no se entiende.\n\nConfirmar:\n- El usuario desea confirmar su cita por lo que respondes \"Confirmar\".\n- Respondes confirmar solo cuando te digan \"Confirmar\", \"Confirmar cita o Confirmar la cita\".\n- Palabras como \"Si\" o \"Confirmo\" o \"Si es correcto\" NO LAS TOMES COMO FLUJO CONFIRMAR pertecen a los demas flujos comos \"Reagendar\" o \"Cancelar\"\n\nSaludo:\n- El usuario saluda SIN CONTEXTO inicial (ej: \"Hola\", \"Buenas tardes\", \"Qué tal\", \"¿Cómo estás?\").\n\nDespedida:\n- El usuario da las gracias, se despide o cierra la conversación de forma cortés.\n- Ejemplos: \"Gracias\", \"Muchas gracias\", \"Esta bien, \"Okey\" \"Listo perfecto\", \"Hasta luego\", \"Buen día\", \"Chao\", \"Excelente gracias\", \"Todo claro\".\n\nEmpecemos de nuevo:\n-Si recibes \"Empecemos de nuevo\" respondes \"Empecemos de nuevo\".\n-El usuario desea repetir el proceso por lo que respondes \"Empecemos de nuevo\".\n-Olvidas todos los flujos anteriores para reiniciar.\n\nREGLA DE ORO DE MEMORIA:\nSi el último mensaje del asistente pertenecía claramente a un flujo de \"Reagendar\" o \"Cancelar\", MANTÉN esa clasificación a menos que el usuario diga explícitamente \"Alto\", \"Volver\" o cambie drásticamente de tema.\n\nOUTPUT:\n\nSolamente sabes responder Confirmar,Reagendar, Cancelar o Repetir no sabes ninguna otra palabra solamente sabes esas 4 cualquier palabra por fuera de esas 3 debes ignorarla completamente\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -4400,
+        -384
+      ],
+      "id": "22c294f2-d8f0-4e16-bad4-aa77e23075ae",
+      "name": "Filtro de intención",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": {{ JSON.stringify($json['Respuesta Corregida']) }},\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2080,
+        -1360
+      ],
+      "id": "89a10c0f-6704-4c4d-9f9b-5b01284f2ead",
+      "name": "Mensaje Reagendar Corregido",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": {{ JSON.stringify($json['Respuesta Corregida']) }},\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2080,
+        -976
+      ],
+      "id": "4796b1a6-4a1f-41ee-9bfc-80d8fcabb8d8",
+      "name": "Mensaje Cancelar Corregido",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": {{ JSON.stringify($json.output) }},\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -2304,
+        -768
+      ],
+      "id": "20acd89e-f4ad-4f03-a8b2-78b7ba9696c0",
+      "name": "Mensaje Cancelar",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"Lo siento, solo estoy entrenada para gestionar tu cita, **si esta se encuentra dentro de las proximas 24hs.** Si es el caso dime cosas como:\\n\\n- Confirmar\\n- Reagendar\\n- Cancelar\\n- Empecemos de nuevo\\n\\nPara otra información, o mayor asistencia puedes comunicarte a:\\n📞 857-389-4010 (English)\\n📞 857-468-3230 (Español)\",\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3056,
+        -576
+      ],
+      "id": "1813435d-b3a4-42ef-a6cd-309a8e17576f",
+      "name": "Mensaje Repetir",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"¡Muchas gracias por confirmar tu cita! ✨ Estamos preparando todo para que disfrutes de una experiencia de relajación total. Será un gusto recibirte en Sándalo Spa. 🌿💆‍♀️ ¡Nos vemos pronto!\",\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3600,
+        192
+      ],
+      "id": "67efa0ff-9214-4fda-a7ef-f604fa92e762",
+      "name": "Mensaje Confirmar",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "9LDv9YSMsBkEGTZG",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/9LDv9YSMsBkEGTZG",
+          "cachedResultName": "tool_disponibilidad"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_id', ``, 'string') }}",
+            "ProfetionalName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('ProfetionalName', ``, 'string') }}",
+            "calendar_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar_id', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ProfetionalName",
+              "displayName": "ProfetionalName",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calendar_id",
+              "displayName": "calendar_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -2960,
+        -1152
+      ],
+      "id": "c871ab76-6034-4500-99e7-014003f07819",
+      "name": "Disponibilidad"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "mxFcHZNrWoWaMqMg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/mxFcHZNrWoWaMqMg",
+          "cachedResultName": "tool_verificacion_12h"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_id', ``, 'string') }}",
+            "calendar_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar_id', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "calendar_id",
+              "displayName": "calendar_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -2816,
+        -1152
+      ],
+      "id": "c53284d9-d746-41e8-ab36-d4ef2b31aa45",
+      "name": "tool_verificacion_12h"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "mxFcHZNrWoWaMqMg",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/mxFcHZNrWoWaMqMg",
+          "cachedResultName": "tool_verificacion_12h"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_id', ``, 'string') }}",
+            "calendar_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar_id', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "calendar_id",
+              "displayName": "calendar_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -3056,
+        -752
+      ],
+      "id": "8146bc57-a491-4832-b7d3-b86e822da341",
+      "name": "tool_verificacion_12hc"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('Edit Fields6').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3056,
+        -192
+      ],
+      "id": "e0a825ab-8f7e-49b6-af59-899f921a0070",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df99985a-0269-4e7e-ae92-17342e79984f",
+              "name": "session_id",
+              "value": "={{ $('Mensaje definitivo').item.json.session_id }}",
+              "type": "string"
+            },
+            {
+              "id": "d3255cb9-be38-4b71-8e52-ae6b9526e24c",
+              "name": "output",
+              "value": "={{ $json.output }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -4048,
+        -384
+      ],
+      "id": "2844bb32-bd07-4671-9c84-bdd985b44385",
+      "name": "Edit Fields6"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('Edit Fields7').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3056,
+        192
+      ],
+      "id": "73d0a2ed-0197-466c-914a-d0f348652619",
+      "name": "Execute a SQL query1",
+      "retryOnFail": false,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "WlgqBqIFsyvMWax1",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/WlgqBqIFsyvMWax1",
+          "cachedResultName": "tool_reagendar"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "event_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_id', ``, 'string') }}",
+            "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('start', ``, 'string') }}",
+            "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('end', ``, 'string') }}",
+            "calendar": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar', ``, 'string') }}",
+            "session_id": "={{ $json.session_id }}",
+            "row_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('row_number', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "start",
+              "displayName": "start",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "end",
+              "displayName": "end",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "calendar",
+              "displayName": "calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -2672,
+        -1152
+      ],
+      "id": "857a1158-922f-4a2b-b557-287b9c65132b",
+      "name": "Reagendar"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "2a072402-d382-4417-bfe0-147ef1465522",
+              "leftValue": "={{ $json.Mensaje.toLowerCase() }}",
+              "rightValue": "reagendar",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "4b7aa0c6-880c-4506-aba8-5677c1599c5c",
+              "leftValue": "={{ $json.Mensaje.toLowerCase() }}",
+              "rightValue": "cancelar",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "c3ccd84f-9cc8-450b-8642-05a0222eaf9d",
+              "leftValue": "={{ $json.Mensaje.toLowerCase() }}",
+              "rightValue": "confirmar",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "2f211341-6d8e-4b7e-920d-a549770980b1",
+              "leftValue": "={{ $json.Mensaje.toLowerCase() }}",
+              "rightValue": "empecemos de nuevo",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -4848,
+        -384
+      ],
+      "id": "b0133a75-def2-4a47-870a-0f4bf09b37a3",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('Mensaje definitivo').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -4624,
+        -448
+      ],
+      "id": "09815585-838c-4ef5-bf6e-ff506583f0a1",
+      "name": "Execute a SQL query2",
+      "retryOnFail": false,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4.1-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -4432,
+        -704
+      ],
+      "id": "6046990d-fb80-4199-add6-af8cdf3fcc6e",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Nb9eOo84yIiBfuGy",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Usa esta herramienta únicamente después de que el cliente haya confirmado explícitamente que desea cancelar la cita. Esta herramienta cancela realmente la cita en Google Calendar y/o base de datos. Es obligatorio usarla antes de decirle al cliente que la cita fue cancelada.",
+        "workflowId": {
+          "__rl": true,
+          "value": "bxzFg6V0ljasjVvU",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/bxzFg6V0ljasjVvU",
+          "cachedResultName": "tool_cancelar"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('row_number', ``, 'string') }}",
+            "event_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('event_id', ``, 'string') }}",
+            "calendar": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('calendar', ``, 'string') }}",
+            "session_id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('session_id', ``, 'string') }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "event_id",
+              "displayName": "event_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "calendar",
+              "displayName": "calendar",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "session_id",
+              "displayName": "session_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -2928,
+        -752
+      ],
+      "id": "017e3c64-94e7-41d3-ba5f-fccfacda2e88",
+      "name": "cancelar_cita"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('Edit Fields6').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3056,
+        0
+      ],
+      "id": "38bbde80-6b17-4b55-a469-b94175469e8f",
+      "name": "Execute a SQL query3",
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"¡Con mucho gusto! Quedamos a tu servicio en Sándalo Spa. ¡Que tengas un gran día! 🌿\",\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3600,
+        -192
+      ],
+      "id": "06349f90-13ef-4553-a1fd-63d1793c8e80",
+      "name": "Mensaje Despedida",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"¡Entendido! ✨ Para poder ayudarte mejor, por favor indícame qué te gustaría hacer con tu cita:\\n\\n✅ Confirmar.\\n❌ Cancelar.\\n🗓️ Reagendar.\\n\\nTambién, ¿podrías proporcionarme nuevamente tu número de teléfono para actualizar tus datos? ¡Muchas gracias! 🌿\",\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3600,
+        0
+      ],
+      "id": "10a3d2ae-784e-4655-8ed6-91e3ffce0e24",
+      "name": "Mensaje Reiniciar Flujos",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "18dc161c-76e0-4fa9-b192-30d909cc40c2",
+              "leftValue": "={{ $json.switch }}",
+              "rightValue": "off",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6464,
+        -384
+      ],
+      "id": "fb82e9d8-8572-48fa-a8c9-32611fdfffcd",
+      "name": "If6"
+    },
+    {
+      "parameters": {
+        "errorMessage": "Bot respondiendose solo"
+      },
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        -6688,
+        -208
+      ],
+      "id": "504de111-988c-45a3-b260-c264f5b40e7b",
+      "name": "Stop and Error",
+      "alwaysOutputData": true,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bd5ebe05-15b8-4060-9273-f77df96f804b",
+              "name": "contact_id",
+              "value": "={{ $json.contact_id }}",
+              "type": "string"
+            },
+            {
+              "id": "b6de9951-676b-42ef-8199-bd5dcff5980d",
+              "name": "switch",
+              "value": "off",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -6864,
+        416
+      ],
+      "id": "483e6a0d-1d2e-4dd5-bc89-c180405d5fc5",
+      "name": "Edit Fields8",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "e717dbd4-8d63-4910-9fa8-632d6611c5fa",
+              "leftValue": "={{ $json.Mensaje.trim().toLowerCase() }}",
+              "rightValue": "={{ \"humano\" }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -7088,
+        416
+      ],
+      "id": "58cc575e-211f-460e-a46c-68bee4d7d28b",
+      "name": "If7",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/contacts/{{ $json.contact_id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"custom_attributes\": {\n    \"bot_switch\": \"{{ $json.switch }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        -6640,
+        416
+      ],
+      "id": "c343b6ee-f0bc-4a81-be5a-f9edbbd56ef4",
+      "name": "Apaga el bot para esa persona",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "594ac5ae-e71d-400c-a03c-c47a618d7f2a",
+                    "leftValue": "={{ $json.output.trim().toLowerCase() }}",
+                    "rightValue": "={{ \"agendar\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Agendar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "fe701cbd-22e5-487f-a46b-38901653b6e0",
+                    "leftValue": "={{ $json.output.trim().toLowerCase() }}",
+                    "rightValue": "={{ \"reagendar\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Reagendar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output.trim().toLowerCase() }}",
+                    "rightValue": "={{ \"cancelar\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "b336e082-a731-4960-bb6e-6e48ec9a5d7d"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Cancelar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "57ff90e3-4aeb-42af-ba83-5d80d0e2cf8a",
+                    "leftValue": "={{ $json.output.trim().toLowerCase() }}",
+                    "rightValue": "={{ \"repetir\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Repetir"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "19c4ae4c-b602-4d98-b144-17c3c6319ac0",
+                    "leftValue": "={{ $json.output.trim().toLowerCase() }}",
+                    "rightValue": "={{ \"saludo\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Saludo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "0bf5adf4-c875-4f42-9e28-690f5fecaab8",
+                    "leftValue": "={{ $json.output.trim().toLowerCase() }}",
+                    "rightValue": "={{ \"despedida\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Despedida"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "1266d46a-83ac-40e6-aa6e-8322ea5a135a",
+                    "leftValue": "={{ $json.output.trim().toLowerCase() }}",
+                    "rightValue": "={{ \"reinciar\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Reiniciar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e8c8dad5-ce1e-47e2-90c0-72fdd9914cbd",
+                    "leftValue": "={{ $json.output.trim().toLowerCase() }}",
+                    "rightValue": "={{ \"confirmar\" }}",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Confirmar"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -3824,
+        -480
+      ],
+      "id": "509cc186-f9c0-4912-9ec7-3cb564c8de03",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "DELETE FROM n8n_chat_histories WHERE session_id = '{{ $('Edit Fields6').item.json.session_id }}';",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        -3056,
+        -384
+      ],
+      "id": "19d31486-cd86-42f7-a156-cafb68ab5814",
+      "name": "Execute a SQL query4",
+      "credentials": {
+        "postgres": {
+          "id": "P7tiBWdMpc7tkd25",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=http://chatwoot:3000/api/v1/accounts/1/conversations/{{$('Webhook').item.json.body.conversation.id }}/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api_access_token",
+              "value": "oe163beRrkQDwxsBGWXeuziK"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"content\": \"¡Buenas! ✨\\n\\nBienvenid@ a Sándalo Spa.\\n\\nPuedo ayudarte a gestionar tu cita si se encuentra dentro de las próximas 24 horas.\\n\\nPor favor, dime qué deseas realizar:\\n\\n✅ Confirmar tu cita.\\n❌ Cancelar tu cita.\\n🗓️ Reagendar tu cita.\\n🔄 Empecemos de nuevo.\\n\\nPara otra información, tarifas o asistencia personalizada, puedes comunicarte a nuestros números de atención:\\n\\n📞 857-389-4010 (English)\\n📞 857-468-3230 (Español)\\n\\n¿En qué te podemos colaborar hoy? 🌿\",\n  \"message_type\": \"outgoing\",\n  \"private\": false\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -3600,
+        -384
+      ],
+      "id": "793222ac-fd5c-415e-b4d4-1e44ffefbf2a",
+      "name": "Mensaje Saludo",
+      "retryOnFail": true,
+      "waitBetweenTries": 1000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "1e4ae2ba-09a6-4bb9-b92b-76e318efd6e8",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "Despedida",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6864,
+        832
+      ],
+      "id": "20a761cc-7985-4018-acbe-7eceddaf810d",
+      "name": "If5",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "dad1a71f-d2a1-41f9-b7dd-e64d2d62e0a8",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "Cancelar",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -6864,
+        640
+      ],
+      "id": "33d801e2-ea38-4d38-9e7f-dfda09d4b373",
+      "name": "Flujo Cancelar / Repetir",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ce1e4b26-e74d-4ec0-8ea0-8c5fea84cbf3",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "Cancelar",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "f257b8e5-d5f6-465a-bf3f-1bb56f43cf01",
+              "leftValue": "={{ $json.output }}",
+              "rightValue": "Repetir",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -7088,
+        736
+      ],
+      "id": "51800498-1adf-41ff-883c-fef11eb1c31f",
+      "name": "Flujo 2",
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop and Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "info_cita_reagendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lía Reagendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "info_cita_cancelar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lía Cancelar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lía Cancelar": {
+      "main": [
+        [
+          {
+            "node": "If3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lía Reagendar": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Lía Cancelar",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Lía Reagendar",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Filtro de intención",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Get memoria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Push memoria": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get memoria": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Redis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Redis": {
+      "main": [
+        [
+          {
+            "node": "Mensaje definitivo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Lía Reagendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Lía Cancelar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Mensaje Repetir",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensaje definitivo": {
+      "main": [
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensaje Reagendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Mensaje Reagendar Corregido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensaje Cancelar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Mensaje Cancelar Corregido",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtro de intención": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields6",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Disponibilidad": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lía Reagendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tool_verificacion_12h": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lía Reagendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "tool_verificacion_12hc": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lía Cancelar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields6": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensaje Confirmar": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reagendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lía Reagendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Filtro de intención",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query2": {
+      "main": [
+        [
+          {
+            "node": "Filtro de intención",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Filtro de intención",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Lía Cancelar",
+            "type": "ai_languageModel",
+            "index": 0
+          },
+          {
+            "node": "Lía Reagendar",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cancelar_cita": {
+      "ai_tool": [
+        [
+          {
+            "node": "Lía Cancelar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensaje Despedida": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensaje Reiniciar Flujos": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Push memoria",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields8": {
+      "main": [
+        [
+          {
+            "node": "Apaga el bot para esa persona",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If7": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields8",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Apaga el bot para esa persona": {
+      "main": [
+        []
+      ]
+    },
+    "Switch": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensaje Saludo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensaje Despedida",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensaje Reiniciar Flujos",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Mensaje Confirmar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mensaje Saludo": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Flujo 2": {
+      "main": [
+        [
+          {
+            "node": "Flujo Cancelar / Repetir",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "544d00e9-c294-4a38-bee6-b47bcbef7d7a",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "2fcd2bbebfa243477c73eb44103e264531a434e82d48daeed5c042e60efb4ab5"
+  },
+  "nodeGroups": [],
+  "id": "s7GYPaeYuNVrpkBf",
+  "tags": []
+}
