@@ -38,16 +38,17 @@ El sistema administra el ciclo de vida de las reservas: envía confirmaciones in
 3. Importa el archivo JSON mediante la opción **Import from File**.
 4. Vincula tus credenciales de **Chatwoot**, **OpenAI**, **Google Calendar**, **Redis** y **Google Sheets**.
 
-Cómo ver el flujo: Indica que has adjuntado el archivo .json de n8n para que puedan importar el flujo y ver la lógica de los nodos.
+Cómo ver el flujo: Archivos .json de n8n adjuntos para importar el flujo y ver la lógica de los nodos.
 
   
-Agente Lía Definitivo.json
-Aut 2_ Trigger Agente IA.json
-Aut 1_ Appointment notification.json
-Disponibilidad.json
-Subworkflow V2 - obtener detalles cita.json
-tool_actualizar_citas24h.json
+
+
+ChatBotSandaloProd.json
+Notificacion Creacion De Cita.json
+Notificación 24h antes.json
 tool_cancelar.json
+tool_detalles_cita.json
+tool_disponibilidad.json
 tool_reagendar.json
 tool_verificacion_12h.json
 
